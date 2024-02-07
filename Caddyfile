@@ -1,0 +1,34 @@
+{$HUB_DOMAIN} {
+    log
+
+    tls {$USER_EMAIL} {
+        #
+    }
+
+    @forbidden {
+        path /admin*
+        not remote_ip {$USER_IP}
+    }
+
+    @internal {
+        path /admin*
+        remote_ip {$USER_IP}
+    }
+
+    @external {
+        not path /admin*
+    }
+
+    handle @internal {
+        reverse_proxy {$HUB_ADMIN_SERVICE}
+    }
+
+    handle @forbidden {
+        respond @forbidden 403
+    }
+
+    handle @external {
+        reverse_proxy {$HUB_SERVICE}
+    }
+
+}

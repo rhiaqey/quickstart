@@ -1,0 +1,101 @@
+version: '3.7'
+
+services:
+  redis:
+    image: "ghcr.io/rhiaqey/redis:7.2.4"
+    environment:
+      - REDIS_PORT_NUMBER=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - "$PWD/data/redis:/bitnami/redis/data:rw"
+    restart: unless-stopped
+  ops:
+    image: "ghcr.io/rhiaqey/ops:master"
+    command: generate-keys --skip --write /data/hub
+    entrypoint: ops
+    volumes:
+      - "$PWD/data/hub:/data/hub:rw"
+    restart: no
+  hub:
+    image: "ghcr.io/rhiaqey/hub:master"
+    environment:
+      - ID=${HUB_ID}
+      - NAME=${HUB_NAME}
+      - NAMESPACE=${HUB_NAMESPACE}
+      - PRIVATE_KEY=${HUB_PRIVATE_KEY_PATH}
+      - REDIS_ADDRESS=${REDIS_ADDRESS}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - PRIVATE_PORT=${HUB_PRIVATE_PORT}
+      - PUBLIC_PORT=${HUB_PUBLIC_PORT}
+      - RUST_LOG=${LOG}
+      - RUST_BACKTRACE=${BACKTRACE}
+    depends_on:
+      - ops
+      - redis
+    volumes:
+      - "$PWD/data/hub:/data/hub:rw"
+    links:
+      - redis
+    restart: unless-stopped
+  producer_ticker:
+    image: "ghcr.io/rhiaqey/ticker:master"
+    environment:
+      - ID=${PRODUCER_1_ID}
+      - NAME=${PRODUCER_1_NAME}
+      - NAMESPACE=${PRODUCER_1_NAMESPACE}
+      - PRIVATE_KEY=${PRODUCER_1_PRIVATE_KEY_PATH}
+      - REDIS_ADDRESS=${REDIS_ADDRESS}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - PRIVATE_PORT=${PRODUCER_1_PRIVATE_PORT}
+      - PUBLIC_PORT=${PRODUCER_1_PUBLIC_PORT}
+      - RUST_LOG=${LOG}
+      - RUST_BACKTRACE=${BACKTRACE}
+    depends_on:
+      - hub
+    links:
+      - redis
+    restart: unless-stopped
+  producer_iss_position:
+    image: "ghcr.io/rhiaqey/iss-position:master"
+    environment:
+      - ID=${PRODUCER_2_ID}
+      - NAME=${PRODUCER_2_NAME}
+      - NAMESPACE=${PRODUCER_2_NAMESPACE}
+      - PRIVATE_KEY=${PRODUCER_2_PRIVATE_KEY_PATH}
+      - REDIS_ADDRESS=${REDIS_ADDRESS}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - PRIVATE_PORT=${PRODUCER_2_PRIVATE_PORT}
+      - PUBLIC_PORT=${PRODUCER_2_PUBLIC_PORT}
+      - RUST_LOG=${LOG}
+      - RUST_BACKTRACE=${BACKTRACE}
+    ports:
+      - "${PRODUCER_2_PUBLIC_PORT}:${PRODUCER_2_PUBLIC_PORT}"
+    depends_on:
+      - hub
+    links:
+      - redis
+    restart: unless-stopped
+  caddy:
+    environment:
+      - HUB_ADMIN_SERVICE=hub:${HUB_PRIVATE_PORT}
+      - HUB_SERVICE=hub:${HUB_PUBLIC_PORT}
+      - HUB_DOMAIN=${HUB_DOMAIN}
+      - USER_EMAIL=${USER_EMAIL}
+      - USER_IP=${USER_IP}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - $PWD/data/caddy:/data/caddy
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+    cap_add:
+      - NET_ADMIN
+    depends_on:
+      - hub
+    links:
+      - hub
+    build:
+      context: .
+      dockerfile: Dockerfile.caddy
+    restart: unless-stopped
