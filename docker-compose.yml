@@ -68,8 +68,6 @@ services:
       - PUBLIC_PORT=${PRODUCER_2_PUBLIC_PORT}
       - RUST_LOG=${LOG}
       - RUST_BACKTRACE=${BACKTRACE}
-    ports:
-      - "${PRODUCER_2_PUBLIC_PORT}:${PRODUCER_2_PUBLIC_PORT}"
     depends_on:
       - hub
     links:
