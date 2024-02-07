@@ -1,5 +1,7 @@
 # Quickstart
 
+## Steps
+
 1. As root run
 
 ```sh
