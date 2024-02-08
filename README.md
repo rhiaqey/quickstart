@@ -28,7 +28,12 @@ bash 02-user-prepare.sh
 
 ### 5. Fill details in .env
 
-### 6. Run server
+### 6. Login to ghcr.io
+```sh
+echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+```
+
+### 7. Run server
 
 ```sh
 bash 03-user-run.sh
