@@ -1,4 +1,8 @@
-{$HUB_DOMAIN} {
+http://${HUB_DOMAIN} {
+    redir https://{$HUB_DOMAIN}{uri} permanent
+}
+
+https://{$HUB_DOMAIN} {
     log
 
     tls {$USER_EMAIL} {
