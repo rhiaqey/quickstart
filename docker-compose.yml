@@ -74,6 +74,7 @@ services:
       - redis
     restart: unless-stopped
   caddy:
+    image: "caddy:2.7.6-alpine"
     environment:
       - HUB_ADMIN_SERVICE=hub:${HUB_PRIVATE_PORT}
       - HUB_SERVICE=hub:${HUB_PUBLIC_PORT}
@@ -93,7 +94,7 @@ services:
       - hub
     links:
       - hub
-    build:
-      context: .
-      dockerfile: Dockerfile.caddy
+    # build:
+      # context: .
+      # dockerfile: Dockerfile.caddy
     restart: unless-stopped
