@@ -2,6 +2,7 @@ version: '3.7'
 
 services:
   redis:
+    container_name: redis
     image: "ghcr.io/rhiaqey/redis:7.2.4"
     environment:
       - REDIS_PORT_NUMBER=${REDIS_PORT}
@@ -10,6 +11,7 @@ services:
       - "$PWD/data/redis:/bitnami/redis/data:rw"
     restart: unless-stopped
   ops:
+    container_name: rhiaqey_ops
     image: "ghcr.io/rhiaqey/ops:master"
     command: generate-keys --skip --write /data/hub
     entrypoint: ops
@@ -17,6 +19,7 @@ services:
       - "$PWD/data/hub:/data/hub:rw"
     restart: no
   hub:
+    container_name: rhiaqey_hub
     image: "ghcr.io/rhiaqey/hub:master"
     environment:
       - ID=${HUB_ID}
@@ -38,6 +41,7 @@ services:
       - redis
     restart: unless-stopped
   producer_ticker:
+    container_name: rhiaqey_producer_ticker_1
     image: "ghcr.io/rhiaqey/ticker:master"
     environment:
       - ID=${PRODUCER_1_ID}
@@ -56,6 +60,7 @@ services:
       - redis
     restart: unless-stopped
   producer_iss_position:
+    container_name: rhiaqey_producer_iss_position_1
     image: "ghcr.io/rhiaqey/iss-position:master"
     environment:
       - ID=${PRODUCER_2_ID}
@@ -74,6 +79,7 @@ services:
       - redis
     restart: unless-stopped
   caddy:
+    container_name: caddy
     image: "caddy:2.7.6-alpine"
     environment:
       - HUB_ADMIN_SERVICE=hub:${HUB_PRIVATE_PORT}
