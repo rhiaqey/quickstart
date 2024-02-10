@@ -73,6 +73,13 @@ services:
     links:
       - redis
     restart: unless-stopped
+  admin:
+    image: "nginx:1.25.3-alpine-slim"
+    volumes:
+      - $PWD/admin:/usr/share/nginx/html/admin
+    depends_on:
+      - hub
+    restart: unless-stopped
   caddy:
     image: "caddy:2.7.6-alpine"
     environment:
@@ -94,6 +101,7 @@ services:
       - hub
     links:
       - hub
+      - admin
     # build:
       # context: .
       # dockerfile: Dockerfile.caddy

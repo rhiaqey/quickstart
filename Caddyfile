@@ -14,7 +14,7 @@ https://{$HUB_DOMAIN} {
         not remote_ip {$USER_IP}
     }
 
-    @internal {
+    @admin_api {
         path /admin*
         remote_ip {$USER_IP}
     }
@@ -30,7 +30,7 @@ https://{$HUB_DOMAIN} {
         header Upgrade    websocket
     }
 
-    handle @internal {
+    handle @admin_api {
         reverse_proxy {$HUB_ADMIN_SERVICE}
     }
 
