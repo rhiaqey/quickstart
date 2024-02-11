@@ -65,6 +65,8 @@ services:
       - RUST_BACKTRACE=${BACKTRACE}
     depends_on:
       - hub
+    volumes:
+      - "$PWD/data/hub:/data/hub:rw"
     links:
       - redis
     restart: unless-stopped
@@ -86,6 +88,8 @@ services:
       - RUST_BACKTRACE=${BACKTRACE}
     depends_on:
       - hub
+    volumes:
+      - "$PWD/data/hub:/data/hub:rw"
     links:
       - redis
     restart: unless-stopped
