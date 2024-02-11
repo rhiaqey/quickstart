@@ -4,8 +4,6 @@ services:
   redis:
     container_name: redis
     image: "ghcr.io/rhiaqey/redis:7.2.4"
-    profiles:
-      - rhiaqey
     environment:
       - REDIS_PORT_NUMBER=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
@@ -15,8 +13,6 @@ services:
   ops:
     container_name: rhiaqey_ops
     image: "ghcr.io/rhiaqey/ops:master"
-    profiles:
-      - rhiaqey
     command: generate-keys --skip --write /data/hub
     entrypoint: ops
     volumes:
@@ -25,8 +21,6 @@ services:
   hub:
     container_name: rhiaqey_hub
     image: "ghcr.io/rhiaqey/hub:master"
-    profiles:
-      - rhiaqey
     environment:
       - ID=${HUB_ID}
       - NAME=${HUB_NAME}
@@ -50,8 +44,6 @@ services:
   producer_ticker:
     container_name: rhiaqey_producer_ticker_1
     image: "ghcr.io/rhiaqey/ticker:master"
-    profiles:
-      - rhiaqey
     environment:
       - ID=${PRODUCER_1_ID}
       - NAME=${PRODUCER_1_NAME}
@@ -73,8 +65,6 @@ services:
   producer_iss_position:
     container_name: rhiaqey_producer_iss_position_1
     image: "ghcr.io/rhiaqey/iss-position:master"
-    profiles:
-      - rhiaqey
     environment:
       - ID=${PRODUCER_2_ID}
       - NAME=${PRODUCER_2_NAME}
@@ -96,8 +86,6 @@ services:
   caddy:
     container_name: caddy
     image: "caddy:2.7.6-alpine"
-    profiles:
-      - rhiaqey
     environment:
       - HUB_ADMIN_SERVICE=hub:${HUB_PRIVATE_PORT}
       - HUB_SERVICE=hub:${HUB_PUBLIC_PORT}
