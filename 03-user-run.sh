@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker compose up --remove-orphans
+docker compose --profile rhiaqey up -d --timestamps
