@@ -42,15 +42,11 @@ https://{$HUB_DOMAIN} {
     handle @ws {
         # forward auth does not work
         # works fine without it
-#       forward_auth {$HUB_SERVICE} {
-#            uri /auth
-#            copy_headers x-api-host x-forwarded-uri x-forwarded-host x-forwarded-for x-api-key x-real-ip forwarded cookie
-#        }
+       forward_auth {$HUB_ADMIN_SERVICE} {
+            uri /auth
+            copy_headers x-api-host x-forwarded-uri x-forwarded-host x-forwarded-for x-api-key x-real-ip forwarded cookie
+        }
 
-        reverse_proxy {$HUB_SERVICE}
-    }
-
-    handle /auth {
         reverse_proxy {$HUB_SERVICE}
     }
 
