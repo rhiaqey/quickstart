@@ -21,6 +21,7 @@ https://{$HUB_DOMAIN} {
 
     @external {
         not path /admin*
+        not path /ws*
     }
 
     @ws {
