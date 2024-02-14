@@ -9,47 +9,61 @@ https://{$HUB_DOMAIN} {
         #
     }
 
+    # Non whitelisted admin block
     @forbidden {
         path /admin*
         not remote_ip {$USER_IP}
     }
 
+    # Admin block
     @admin_api {
         path /admin*
         remote_ip {$USER_IP}
     }
 
-    @external {
-        not path /admin*
-        not path /ws*
-    }
-
+    # WebSocket block
     @ws {
         path /ws*
-        not path /admin*
         header Connection *Upgrade*
         header Upgrade    websocket
     }
 
+    # Allow access to /admin only to whitelisted ips
     handle @admin_api {
         reverse_proxy {$HUB_ADMIN_SERVICE}
     }
 
+    # Do not allow non whitelisted ips to access /admin
     handle @forbidden {
         respond @forbidden 403
     }
 
+    # Allow /ws
     handle @ws {
-        forward_auth {$HUB_SERVICE} {
-            uri /auth
-            copy_headers x-api-host x-forwarded-uri x-forwarded-host x-forwarded-for x-api-key x-real-ip forwarded cookie
-        }
+        # forward auth does not work
+        # works fine without it
+#       forward_auth {$HUB_SERVICE} {
+#            uri /auth
+#            copy_headers x-api-host x-forwarded-uri x-forwarded-host x-forwarded-for x-api-key x-real-ip forwarded cookie
+#        }
 
         reverse_proxy {$HUB_SERVICE}
     }
 
-    handle @external {
+    handle /auth {
         reverse_proxy {$HUB_SERVICE}
+    }
+
+    # Allow home
+    handle_path / {
+        reverse_proxy {$HUB_SERVICE}
+    }
+
+    # Fallback for anything else
+    handle {
+        respond "Access denied" 403 {
+    	    close
+        }
     }
 
 }
