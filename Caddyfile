@@ -39,16 +39,16 @@ https://{$HUB_DOMAIN} {
         respond @forbidden 403
     }
 
-    handle @external {
-        reverse_proxy {$HUB_SERVICE}
-    }
-
     handle @ws {
         forward_auth {$HUB_SERVICE} {
             uri /auth
             copy_headers x-api-host x-forwarded-uri x-forwarded-host x-forwarded-for x-api-key x-real-ip forwarded cookie
         }
 
+        reverse_proxy {$HUB_SERVICE}
+    }
+
+    handle @external {
         reverse_proxy {$HUB_SERVICE}
     }
 
