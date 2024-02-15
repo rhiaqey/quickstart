@@ -38,7 +38,7 @@ ufw allow http
 ufw allow https
 # ufw allow from "$ip"
 
-echo "y" | ufw enable
+ufw --force enable
 
 # additional software installation
 apt install gh # github
