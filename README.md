@@ -5,7 +5,7 @@
 ### 1. As root run
 
 ```sh
-wget -O - https://raw.githubusercontent.com/rhiaqey/quickstart/master/01-root-init.sh | bash
+wget --no-cache -O - https://raw.githubusercontent.com/rhiaqey/quickstart/master/01-root-init.sh | bash
 ```
 
 ### 2. Switch to rhiaqey user
