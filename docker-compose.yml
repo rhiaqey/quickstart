@@ -84,6 +84,27 @@ services:
     links:
       - redis
     restart: unless-stopped
+  gateway_ws:
+    container_name: rhiaqey_gateway_ws_3
+    image: "rhiaqey/websocket:latest"
+    environment:
+      - ID=${GATEWAY_3_ID}
+      - NAME=${GATEWAY_3_NAME}
+      - NAMESPACE=${GATEWAY_3_NAMESPACE}
+      - PRIVATE_KEY=${GATEWAY_3_PRIVATE_KEY_PATH}
+      - REDIS_ADDRESS=${REDIS_ADDRESS}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - PRIVATE_PORT=${GATEWAY_3_PRIVATE_PORT}
+      - PUBLIC_PORT=${GATEWAY_3_PUBLIC_PORT}
+      - RUST_LOG=${LOG}
+      - RUST_BACKTRACE=${BACKTRACE}
+    depends_on:
+      - hub
+    volumes:
+      - "$PWD/data/hub:/data/hub:rw"
+    links:
+      - redis
+    restart: unless-stopped
   caddy:
     container_name: caddy
     image: "caddy:2.7.6-alpine"
@@ -91,6 +112,8 @@ services:
       - HUB_ADMIN_SERVICE=hub:${HUB_PRIVATE_PORT}
       - HUB_SERVICE=hub:${HUB_PUBLIC_PORT}
       - HUB_DOMAIN=${HUB_DOMAIN}
+      - GATEWAY_SERVICE=gateway_ws:${GATEWAY_3_PUBLIC_PORT}
+      - GATEWAY_DOMAIN=${GATEWAY_3_DOMAIN}
       - USER_EMAIL=${USER_EMAIL}
       - USER_IP=${USER_IP}
     ports:
@@ -106,6 +129,7 @@ services:
       - hub
     links:
       - hub
+      - gateway_ws
     # build:
       # context: .
       # dockerfile: Dockerfile.caddy

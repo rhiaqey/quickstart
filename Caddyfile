@@ -1,4 +1,4 @@
-http://${HUB_DOMAIN} {
+http://{$HUB_DOMAIN} {
     redir https://{$HUB_DOMAIN}{uri} permanent
 }
 
@@ -62,4 +62,25 @@ https://{$HUB_DOMAIN} {
         }
     }
 
+}
+
+https://{$GATEWAY_DOMAIN} {
+
+    @ws {
+        path /ws*
+        header Connection *Upgrade*
+        header Upgrade    websocket
+    }
+
+    # Allow /ws
+    handle @ws {
+        reverse_proxy {$GATEWAY_SERVICE}
+    }
+
+    # Fallback for anything else
+    handle {
+        respond "Access denied" 403 {
+    	    close
+        }
+    }
 }

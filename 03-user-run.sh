@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker compose up -d --timestamps
+docker compose up --pull always -d --timestamps --remove-orphans
