@@ -12,21 +12,23 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # option -s gives Illegal Option -s
-read -p "Your IP: " ip
+# read -p "Your IP: " ip
 
 # validate IP format
-if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-  echo "Valid IP"
-else
-  echo "Invalid IP format" 1>&2
-  exit 1
-fi
+#if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+#  echo "Valid IP"
+#else
+#  echo "Invalid IP format" 1>&2
+#  exit 1
+#fi
 
 # option -s gives Illegal Option -s
-read -p "New user's password: " password
+# read -p "New user's password: " password
+
+PASSWORD="$(openssl rand -base64 12)"
 
 # create a user with a home directory
-useradd -m rhiaqey -s /bin/bash -u 1001 -g docker -p $(openssl passwd -1 $password)
+useradd -m rhiaqey -s /bin/bash -u 1001 -g docker -p "${PASSWORD}"
 
 sysctl vm.overcommit_memory=1
 
@@ -40,3 +42,5 @@ ufw enable
 
 # additional software installation
 apt install gh # github
+
+echo "New user created with password: ${PASSWORD}"
