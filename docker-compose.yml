@@ -64,7 +64,7 @@ services:
       - redis
     restart: unless-stopped
   producer_iss_position:
-    container_name: rhiaqey_producer_iss_position_1
+    container_name: rhiaqey_producer_iss_position_2
     image: "rhiaqey/iss-position:latest"
     environment:
       - ID=${PRODUCER_2_ID}
