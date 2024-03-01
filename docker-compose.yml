@@ -3,7 +3,7 @@ version: '3.7'
 services:
   redis:
     container_name: redis
-    image: "rhiaqey/redis:7.2.4"
+    image: "rhiaqey/redis:latest"
     environment:
       - REDIS_PORT_NUMBER=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
