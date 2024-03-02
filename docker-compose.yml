@@ -8,7 +8,9 @@ services:
       - REDIS_PORT_NUMBER=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
     volumes:
-      - "$PWD/data/redis:/bitnami/redis/data:rw"
+      - "$PWD/data/redis/tmp:/opt/bitnami/redis/tmp:rw"
+      - "$PWD/data/redis/logs:/opt/bitnami/redis/logs:rw"
+      - "$PWD/data/redis/data:/bitnami/redis/data:rw"
     restart: unless-stopped
   ops:
     container_name: rhiaqey_ops
