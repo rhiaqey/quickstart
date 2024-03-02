@@ -17,7 +17,7 @@ su -l rhiaqey
 ### 3. Clone repository
 
 ```sh
-gh repo clone rhiaqey/quickstart
+git clone https://github.com/rhiaqey/quickstart.git
 ```
 
 ### 4. Prepare user folder and settings
@@ -28,12 +28,18 @@ bash 02-user-prepare.sh
 
 ### 5. Fill details in .env
 
-### 6. Login to ghcr.io
-```sh
-echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+```bash
+USER_IP # Admin dashboard whitelisted IP 
+USER_EMAIL # Let's Encrypt registration email
+# //
+REDIS_PASSWORD # This needs to be something stronger than the default
+# //
+HUB_DOMAIN # Public domain 
+# //
+GATEWAY_3_DOMAIN # Also public facing domain
 ```
 
-### 7. Run server
+### 6. Run server
 
 ```sh
 bash 03-user-run.sh
