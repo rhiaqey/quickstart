@@ -11,9 +11,10 @@ ssh -i "aws-security.pem" ec2-user@instance.region.compute.amazonaws.com
 
 ```bash
 sudo yum update -y
-sudo yum install -y docker
+sudo yum install -y docker git
 sudo usermod -a -G docker ec2-user
 sudo service docker start
+# Restart server
 ```
 
 ## Install docker-compose
