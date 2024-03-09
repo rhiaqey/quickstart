@@ -11,6 +11,8 @@ services:
       - "$PWD/data/redis/tmp:/opt/bitnami/redis/tmp:rw"
       - "$PWD/data/redis/logs:/opt/bitnami/redis/logs:rw"
       - "$PWD/data/redis/data:/bitnami/redis/data:rw"
+    ports:
+      - "6379:6379"
     restart: unless-stopped
   ops:
     container_name: rhiaqey_ops
