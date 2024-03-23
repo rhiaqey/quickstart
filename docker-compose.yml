@@ -21,9 +21,10 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_MASTER_HOST=redis-master
     volumes:
-      - "$PWD/data/redis/tmp:/opt/bitnami/redis/tmp:rw"
-      - "$PWD/data/redis/logs:/opt/bitnami/redis/logs:rw"
-      - "$PWD/data/redis/data:/bitnami/redis/data:rw"
+      - "$PWD/data/redis-sentinel/tmp:/opt/bitnami/redis-sentinel/tmp:rw"
+      - "$PWD/data/redis-sentinel/logs:/opt/bitnami/redis-sentinel/logs:rw"
+      - "$PWD/data/redis-sentinel/data:/bitnami/redis-sentinel/data:rw"
+      - "$PWD/data/redis-sentinel/conf:/bitnami/redis-sentinel/conf:rw"
     ports:
       - "26379:26379"
     depends_on:

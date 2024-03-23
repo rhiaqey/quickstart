@@ -7,6 +7,11 @@ mkdir $(pwd)/data/redis
 mkdir $(pwd)/data/redis/tmp
 mkdir $(pwd)/data/redis/logs
 mkdir $(pwd)/data/redis/data
+mkdir $(pwd)/data/redis-sentinel
+mkdir $(pwd)/data/redis-sentinel/tmp
+mkdir $(pwd)/data/redis-sentinel/logs
+mkdir $(pwd)/data/redis-sentinel/data
+mkdir $(pwd)/data/redis-sentinel/conf
 mkdir $(pwd)/data/producers
 mkdir $(pwd)/data/gateways
 mkdir $(pwd)/data/caddy
@@ -18,6 +23,11 @@ chmod o+w $(pwd)/data/redis
 chmod o+w $(pwd)/data/redis/tmp
 chmod o+w $(pwd)/data/redis/logs
 chmod o+w $(pwd)/data/redis/data
+chmod o+w $(pwd)/data/redis-sentinel
+chmod o+w $(pwd)/data/redis-sentinel/tmp
+chmod o+w $(pwd)/data/redis-sentinel/logs
+chmod o+w $(pwd)/data/redis-sentinel/data
+chmod o+w $(pwd)/data/redis-sentinel/conf
 chmod o+w $(pwd)/data/producers
 chmod o+w $(pwd)/data/gateways
 chmod o+w $(pwd)/data/caddy
