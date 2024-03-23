@@ -22,19 +22,43 @@ services:
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
     restart: no
-  hub:
-    container_name: rhiaqey_hub
+  hub1:
+    container_name: rhiaqey_hub_1
     image: "rhiaqey/hub:latest"
     environment:
-      - ID=${HUB_ID}
-      - NAME=${HUB_NAME}
-      - NAMESPACE=${HUB_NAMESPACE}
-      - PUBLIC_KEY=${HUB_PUBLIC_KEY_PATH}
-      - PRIVATE_KEY=${HUB_PRIVATE_KEY_PATH}
+      - ID=${HUB_1_ID}
+      - NAME=${HUB_1_NAME}
+      - NAMESPACE=${HUB_1_NAMESPACE}
+      - PUBLIC_KEY=${HUB_1_PUBLIC_KEY_PATH}
+      - PRIVATE_KEY=${HUB_1_PRIVATE_KEY_PATH}
+      - PRIVATE_PORT=${HUB_1_PRIVATE_PORT}
+      - PUBLIC_PORT=${HUB_1_PUBLIC_PORT}
       - REDIS_ADDRESS=${REDIS_ADDRESS}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - PRIVATE_PORT=${HUB_PRIVATE_PORT}
-      - PUBLIC_PORT=${HUB_PUBLIC_PORT}
+      - RUST_LOG=${LOG}
+      - RUST_BACKTRACE=${BACKTRACE}
+    depends_on:
+      - ops
+      - redis
+    entrypoint: hub
+    volumes:
+      - "$PWD/data/hub:/data/hub:rw"
+    links:
+      - redis
+    restart: unless-stopped
+  hub2:
+    container_name: rhiaqey_hub_2
+    image: "rhiaqey/hub:latest"
+    environment:
+      - ID=${HUB_2_ID}
+      - NAME=${HUB_2_NAME}
+      - NAMESPACE=${HUB_2_NAMESPACE}
+      - PUBLIC_KEY=${HUB_2_PUBLIC_KEY_PATH}
+      - PRIVATE_KEY=${HUB_2_PRIVATE_KEY_PATH}
+      - PRIVATE_PORT=${HUB_2_PRIVATE_PORT}
+      - PUBLIC_PORT=${HUB_2_PUBLIC_PORT}
+      - REDIS_ADDRESS=${REDIS_ADDRESS}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
       - RUST_LOG=${LOG}
       - RUST_BACKTRACE=${BACKTRACE}
     depends_on:
@@ -61,7 +85,8 @@ services:
       - RUST_LOG=${LOG}
       - RUST_BACKTRACE=${BACKTRACE}
     depends_on:
-      - hub
+      - hub1
+      - hub2
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
     links:
@@ -82,28 +107,50 @@ services:
       - RUST_LOG=${LOG}
       - RUST_BACKTRACE=${BACKTRACE}
     depends_on:
-      - hub
+      - hub1
+      - hub2
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
     links:
       - redis
     restart: unless-stopped
-  gateway_ws:
-    container_name: rhiaqey_gateway_ws_3
+  gateway_ws_1:
+    container_name: rhiaqey_gateway_ws_1
     image: "rhiaqey/websocket:latest"
     environment:
-      - ID=${GATEWAY_3_ID}
-      - NAME=${GATEWAY_3_NAME}
-      - NAMESPACE=${GATEWAY_3_NAMESPACE}
-      - PRIVATE_KEY=${GATEWAY_3_PRIVATE_KEY_PATH}
+      - ID=${GATEWAY_1_ID}
+      - NAME=${GATEWAY_1_NAME}
+      - NAMESPACE=${GATEWAY_1_NAMESPACE}
+      - PRIVATE_KEY=${GATEWAY_1_PRIVATE_KEY_PATH}
+      - PRIVATE_PORT=${GATEWAY_1_PRIVATE_PORT}
+      - PUBLIC_PORT=${GATEWAY_1_PUBLIC_PORT}
       - REDIS_ADDRESS=${REDIS_ADDRESS}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - PRIVATE_PORT=${GATEWAY_3_PRIVATE_PORT}
-      - PUBLIC_PORT=${GATEWAY_3_PUBLIC_PORT}
       - RUST_LOG=${LOG}
       - RUST_BACKTRACE=${BACKTRACE}
     depends_on:
-      - hub
+      - hub1
+      - hub2
+    volumes:
+      - "$PWD/data/hub:/data/hub:rw"
+    links:
+      - redis
+    restart: unless-stopped
+  gateway_ws_2:
+    container_name: rhiaqey_gateway_ws_2
+    image: "rhiaqey/websocket:latest"
+    environment:
+      - ID=${GATEWAY_2_ID}
+      - NAME=${GATEWAY_2_NAME}
+      - NAMESPACE=${GATEWAY_2_NAMESPACE}
+      - PRIVATE_KEY=${GATEWAY_2_PRIVATE_KEY_PATH}
+      - PRIVATE_PORT=${GATEWAY_2_PRIVATE_PORT}
+      - PUBLIC_PORT=${GATEWAY_2_PUBLIC_PORT}
+      - RUST_LOG=${LOG}
+      - RUST_BACKTRACE=${BACKTRACE}
+    depends_on:
+      - hub1
+      - hub2
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
     links:
@@ -113,11 +160,14 @@ services:
     container_name: caddy
     image: "rhiaqey/caddy:latest"
     environment:
-      - HUB_ADMIN_SERVICE=hub:${HUB_PRIVATE_PORT}
-      - HUB_SERVICE=hub:${HUB_PUBLIC_PORT}
       - HUB_DOMAIN=${HUB_DOMAIN}
-      - GATEWAY_SERVICE=gateway_ws:${GATEWAY_3_PUBLIC_PORT}
-      - GATEWAY_DOMAIN=${GATEWAY_3_DOMAIN}
+      - HUB_1_ADMIN_SERVICE=hub1:${HUB_1_PRIVATE_PORT}
+      - HUB_1_SERVICE=hub1:${HUB_1_PUBLIC_PORT}
+      - HUB_2_ADMIN_SERVICE=hub2:${HUB_2_PRIVATE_PORT}
+      - HUB_2_SERVICE=hub2:${HUB_2_PUBLIC_PORT}
+      - GATEWAY_DOMAIN=${GATEWAY_DOMAIN}
+      - GATEWAY_1_SERVICE=gateway_ws_1:${GATEWAY_1_PUBLIC_PORT}
+      - GATEWAY_2_SERVICE=gateway_ws_2:${GATEWAY_2_PUBLIC_PORT}
       - USER_EMAIL=${USER_EMAIL}
       - USER_IP=${USER_IP}
     ports:
@@ -130,8 +180,11 @@ services:
     cap_add:
       - NET_ADMIN
     depends_on:
-      - hub
+      - hub1
+      - hub2
     links:
-      - hub
-      - gateway_ws
+      - hub1
+      - hub2
+      - gateway_ws_1
+      - gateway_ws_2
     restart: unless-stopped

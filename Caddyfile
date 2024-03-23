@@ -30,7 +30,7 @@ https://{$HUB_DOMAIN} {
 
     # Allow access to /admin only to whitelisted ips
     handle @admin_api {
-        reverse_proxy {$HUB_ADMIN_SERVICE}
+        reverse_proxy {$HUB_1_ADMIN_SERVICE} {$HUB_2_ADMIN_SERVICE}
     }
 
     # Do not allow non whitelisted ips to access /admin
@@ -42,17 +42,17 @@ https://{$HUB_DOMAIN} {
     handle @ws {
         # forward auth does not work
         # works fine without it
-       forward_auth {$HUB_ADMIN_SERVICE} {
+       forward_auth {$HUB_1_ADMIN_SERVICE} {$HUB_2_ADMIN_SERVICE} {
             uri /auth
             copy_headers x-api-host x-forwarded-uri x-forwarded-host x-forwarded-for x-api-key x-real-ip forwarded cookie
         }
 
-        reverse_proxy {$HUB_SERVICE}
+        reverse_proxy {$HUB_1_SERVICE} {$HUB_2_SERVICE}
     }
 
     # Allow home
     handle_path / {
-        reverse_proxy {$HUB_SERVICE}
+        reverse_proxy {$HUB_1_SERVICE} {$HUB_2_SERVICE}
     }
 
     # Fallback for anything else
@@ -74,7 +74,7 @@ https://{$GATEWAY_DOMAIN} {
 
     # Allow /ws
     handle @ws {
-        reverse_proxy {$GATEWAY_SERVICE}
+        reverse_proxy {$GATEWAY_1_SERVICE} {$GATEWAY_2_SERVICE}
     }
 
     # Fallback for anything else
