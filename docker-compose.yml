@@ -166,6 +166,10 @@ services:
     depends_on:
       - ops
       - redis-master
+      - redis-slave-1
+      - redis-sentinel-1
+      - redis-sentinel-2
+      - redis-sentinel-3
     entrypoint: hub
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
@@ -198,6 +202,10 @@ services:
     depends_on:
       - ops
       - redis-master
+      - redis-slave-1
+      - redis-sentinel-1
+      - redis-sentinel-2
+      - redis-sentinel-3
     entrypoint: hub
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
@@ -260,7 +268,66 @@ services:
     depends_on:
       - hub1
       - hub2
+    volumes:
+      - "$PWD/data/hub:/data/hub:rw"
+    links:
       - redis-master
+      - redis-slave-1
+      - redis-sentinel-1
+      - redis-sentinel-2
+      - redis-sentinel-3
+    restart: unless-stopped
+
+  producer-ticker-1:
+    container_name: rhiaqey-producer-ticker-1
+    image: "rhiaqey/ticker:latest"
+    environment:
+      - ID=${PRODUCER_1_ID}
+      - NAME=${PRODUCER_1_NAME}
+      - NAMESPACE=${PRODUCER_1_NAMESPACE}
+      - PRIVATE_KEY=${PRODUCER_1_PRIVATE_KEY_PATH}
+      - PRIVATE_PORT=${PRODUCER_1_PRIVATE_PORT}
+      - PUBLIC_PORT=${PRODUCER_1_PUBLIC_PORT}
+      - RUST_LOG=${LOG}
+      - RUST_BACKTRACE=${BACKTRACE}
+      - REDIS_ADDRESS=${REDIS_ADDRESS}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_MODE=${REDIS_MODE}
+      - REDIS_SENTINEL_MASTER=${REDIS_SENTINEL_MASTER}
+      - REDIS_SENTINEL_ADDRESSES=${REDIS_SENTINEL_ADDRESSES}
+    depends_on:
+      - hub1
+      - hub2
+    volumes:
+      - "$PWD/data/hub:/data/hub:rw"
+    links:
+      - redis-master
+      - redis-slave-1
+      - redis-sentinel-1
+      - redis-sentinel-2
+      - redis-sentinel-3
+    restart: unless-stopped
+
+  producer-iss-position-1:
+    container_name: rhiaqey-producer-iss-position-1
+    image: "rhiaqey/iss-position:latest"
+    environment:
+      - ID=${PRODUCER_2_ID}
+      - NAME=${PRODUCER_2_NAME}
+      - NAMESPACE=${PRODUCER_2_NAMESPACE}
+      - PRIVATE_KEY=${PRODUCER_2_PRIVATE_KEY_PATH}
+      - PRIVATE_PORT=${PRODUCER_2_PRIVATE_PORT}
+      - PUBLIC_PORT=${PRODUCER_2_PUBLIC_PORT}
+      - RUST_LOG=${LOG}
+      - RUST_BACKTRACE=${BACKTRACE}
+      - REDIS_ADDRESS=${REDIS_ADDRESS}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_MODE=${REDIS_MODE}
+      - REDIS_SENTINEL_MASTER=${REDIS_SENTINEL_MASTER}
+      - REDIS_SENTINEL_ADDRESSES=${REDIS_SENTINEL_ADDRESSES}
+    depends_on:
+      - hub1
+      - hub2
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
     links:
