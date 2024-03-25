@@ -135,3 +135,76 @@ services:
 #    links:
 #      - redis-master
 #    restart: unless-stopped
+
+  ops:
+    container_name: rhiaqey-ops
+    image: "rhiaqey/hub:latest"
+    command: generate-keys --skip --write /data/hub
+    entrypoint: ops
+    volumes:
+      - "$PWD/data/hub:/data/hub:rw"
+    restart: no
+
+  hub1:
+    container_name: rhiaqey-hub-1
+    image: "rhiaqey/hub:latest"
+    environment:
+      - ID=${HUB_1_ID}
+      - PRIVATE_PORT=${HUB_1_PRIVATE_PORT}
+      - PUBLIC_PORT=${HUB_1_PUBLIC_PORT}
+      - NAME=${HUB_NAME}
+      - NAMESPACE=${HUB_NAMESPACE}
+      - PUBLIC_KEY=${HUB_PUBLIC_KEY_PATH}
+      - PRIVATE_KEY=${HUB_PRIVATE_KEY_PATH}
+      - RUST_LOG=${LOG}
+      - RUST_BACKTRACE=${BACKTRACE}
+      - REDIS_ADDRESS=${REDIS_ADDRESS}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_MODE=${REDIS_MODE}
+      - REDIS_SENTINEL_MASTER=${REDIS_SENTINEL_MASTER}
+      - REDIS_SENTINEL_ADDRESSES=${REDIS_SENTINEL_ADDRESSES}
+    depends_on:
+      - ops
+      - redis-master
+    entrypoint: hub
+    volumes:
+      - "$PWD/data/hub:/data/hub:rw"
+    links:
+      - redis-master
+      - redis-slave-1
+      - redis-sentinel-1
+      - redis-sentinel-2
+      - redis-sentinel-3
+    restart: unless-stopped
+
+  hub2:
+    container_name: rhiaqey-hub-2
+    image: "rhiaqey/hub:latest"
+    environment:
+      - ID=${HUB_2_ID}
+      - PRIVATE_PORT=${HUB_2_PRIVATE_PORT}
+      - PUBLIC_PORT=${HUB_2_PUBLIC_PORT}
+      - NAME=${HUB_NAME}
+      - NAMESPACE=${HUB_NAMESPACE}
+      - PUBLIC_KEY=${HUB_PUBLIC_KEY_PATH}
+      - PRIVATE_KEY=${HUB_PRIVATE_KEY_PATH}
+      - RUST_LOG=${LOG}
+      - RUST_BACKTRACE=${BACKTRACE}
+      - REDIS_ADDRESS=${REDIS_ADDRESS}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_MODE=${REDIS_MODE}
+      - REDIS_SENTINEL_MASTER=${REDIS_SENTINEL_MASTER}
+      - REDIS_SENTINEL_ADDRESSES=${REDIS_SENTINEL_ADDRESSES}
+    depends_on:
+      - ops
+      - redis-master
+    entrypoint: hub
+    volumes:
+      - "$PWD/data/hub:/data/hub:rw"
+    links:
+      - redis-master
+      - redis-slave-1
+      - redis-sentinel-1
+      - redis-sentinel-2
+      - redis-sentinel-3
+    restart: unless-stopped
