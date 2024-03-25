@@ -1,220 +1,137 @@
 version: '3.7'
 
 services:
+
   redis-master:
     container_name: redis-master
     image: "rhiaqey/redis:latest"
     environment:
       - REDIS_PORT_NUMBER=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_REPLICATION_MODE=master
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     volumes:
-      - "$PWD/data/redis/tmp:/opt/bitnami/redis/tmp:rw"
-      - "$PWD/data/redis/logs:/opt/bitnami/redis/logs:rw"
-      - "$PWD/data/redis/data:/bitnami/redis/data:rw"
+      - "$PWD/data/redis-master/tmp:/opt/bitnami/redis/tmp:rw"
+      - "$PWD/data/redis-master/logs:/opt/bitnami/redis/logs:rw"
+      - "$PWD/data/redis-master/data:/bitnami/redis/data:rw"
     ports:
-      - "6379:6379"
+      - '6379:6379'
     restart: unless-stopped
-  redis-sentinel:
-    container_name: redis-sentinel
+
+  redis-sentinel-1:
+    container_name: redis-sentinel-1
     image: "rhiaqey/redis-sentinel:latest"
     environment:
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PORT_NUMBER=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_SENTINEL_MASTER_NAME=mymaster
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     volumes:
-      - "$PWD/data/redis-sentinel/tmp:/opt/bitnami/redis-sentinel/tmp:rw"
-      - "$PWD/data/redis-sentinel/logs:/opt/bitnami/redis-sentinel/logs:rw"
-      - "$PWD/data/redis-sentinel/data:/bitnami/redis-sentinel/data:rw"
-      - "$PWD/data/redis-sentinel/conf:/bitnami/redis-sentinel/conf:rw"
+      - "$PWD/data/redis-sentinel-1/tmp:/opt/bitnami/redis-sentinel/tmp:rw"
+      - "$PWD/data/redis-sentinel-1/logs:/opt/bitnami/redis-sentinel/logs:rw"
+      - "$PWD/data/redis-sentinel-1/data:/bitnami/redis-sentinel/data:rw"
     ports:
-      - "26379:26379"
+      - '26379:26379'
     depends_on:
       - redis-master
     links:
       - redis-master
+      - redis-slave-1
+      #- redis-slave-2
     restart: unless-stopped
-  ops:
-    container_name: rhiaqey-ops
-    image: "rhiaqey/hub:latest"
-    command: generate-keys --skip --write /data/hub
-    entrypoint: ops
-    volumes:
-      - "$PWD/data/hub:/data/hub:rw"
-    restart: no
-  hub1:
-    container_name: rhiaqey-hub-1
-    image: "rhiaqey/hub:latest"
+
+  redis-sentinel-2:
+    container_name: redis-sentinel-2
+    image: "rhiaqey/redis-sentinel:latest"
     environment:
-      - ID=${HUB_1_ID}
-      - NAME=${HUB_1_NAME}
-      - NAMESPACE=${HUB_1_NAMESPACE}
-      - PUBLIC_KEY=${HUB_1_PUBLIC_KEY_PATH}
-      - PRIVATE_KEY=${HUB_1_PRIVATE_KEY_PATH}
-      - PRIVATE_PORT=${HUB_1_PRIVATE_PORT}
-      - PUBLIC_PORT=${HUB_1_PUBLIC_PORT}
-      - REDIS_ADDRESS=${REDIS_ADDRESS}
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PORT_NUMBER=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - RUST_LOG=${LOG}
-      - RUST_BACKTRACE=${BACKTRACE}
-    depends_on:
-      - ops
-      - redis-master
-    entrypoint: hub
+      - REDIS_SENTINEL_MASTER_NAME=mymaster
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
     volumes:
-      - "$PWD/data/hub:/data/hub:rw"
-    links:
-      - redis-master
-      - redis-sentinel
-    restart: unless-stopped
-  hub2:
-    container_name: rhiaqey-hub-2
-    image: "rhiaqey/hub:latest"
-    environment:
-      - ID=${HUB_2_ID}
-      - NAME=${HUB_2_NAME}
-      - NAMESPACE=${HUB_2_NAMESPACE}
-      - PUBLIC_KEY=${HUB_2_PUBLIC_KEY_PATH}
-      - PRIVATE_KEY=${HUB_2_PRIVATE_KEY_PATH}
-      - PRIVATE_PORT=${HUB_2_PRIVATE_PORT}
-      - PUBLIC_PORT=${HUB_2_PUBLIC_PORT}
-      - REDIS_ADDRESS=${REDIS_ADDRESS}
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - RUST_LOG=${LOG}
-      - RUST_BACKTRACE=${BACKTRACE}
-    depends_on:
-      - ops
-      - redis-master
-    entrypoint: hub
-    volumes:
-      - "$PWD/data/hub:/data/hub:rw"
-    links:
-      - redis-master
-      - redis-sentinel
-    restart: unless-stopped
-  producer_ticker:
-    container_name: rhiaqey-producer-ticker-1
-    image: "rhiaqey/ticker:latest"
-    environment:
-      - ID=${PRODUCER_1_ID}
-      - NAME=${PRODUCER_1_NAME}
-      - NAMESPACE=${PRODUCER_1_NAMESPACE}
-      - PRIVATE_KEY=${PRODUCER_1_PRIVATE_KEY_PATH}
-      - REDIS_ADDRESS=${REDIS_ADDRESS}
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - PRIVATE_PORT=${PRODUCER_1_PRIVATE_PORT}
-      - PUBLIC_PORT=${PRODUCER_1_PUBLIC_PORT}
-      - RUST_LOG=${LOG}
-      - RUST_BACKTRACE=${BACKTRACE}
-    depends_on:
-      - hub1
-      - hub2
-      - redis-master
-    volumes:
-      - "$PWD/data/hub:/data/hub:rw"
-    links:
-      - redis-master
-      - redis-sentinel
-    restart: unless-stopped
-  producer_iss_position:
-    container_name: rhiaqey-producer-iss-position-2
-    image: "rhiaqey/iss-position:latest"
-    environment:
-      - ID=${PRODUCER_2_ID}
-      - NAME=${PRODUCER_2_NAME}
-      - NAMESPACE=${PRODUCER_2_NAMESPACE}
-      - PRIVATE_KEY=${PRODUCER_2_PRIVATE_KEY_PATH}
-      - REDIS_ADDRESS=${REDIS_ADDRESS}
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - PRIVATE_PORT=${PRODUCER_2_PRIVATE_PORT}
-      - PUBLIC_PORT=${PRODUCER_2_PUBLIC_PORT}
-      - RUST_LOG=${LOG}
-      - RUST_BACKTRACE=${BACKTRACE}
-    depends_on:
-      - hub1
-      - hub2
-      - redis-master
-    volumes:
-      - "$PWD/data/hub:/data/hub:rw"
-    links:
-      - redis-master
-      - redis-sentinel
-    restart: unless-stopped
-  gateway_ws_1:
-    container_name: rhiaqey-gateway-ws-1
-    image: "rhiaqey/websocket:latest"
-    environment:
-      - ID=${GATEWAY_1_ID}
-      - NAME=${GATEWAY_1_NAME}
-      - NAMESPACE=${GATEWAY_1_NAMESPACE}
-      - PRIVATE_KEY=${GATEWAY_1_PRIVATE_KEY_PATH}
-      - PRIVATE_PORT=${GATEWAY_1_PRIVATE_PORT}
-      - PUBLIC_PORT=${GATEWAY_1_PUBLIC_PORT}
-      - REDIS_ADDRESS=${REDIS_ADDRESS}
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - RUST_LOG=${LOG}
-      - RUST_BACKTRACE=${BACKTRACE}
-    depends_on:
-      - hub1
-      - hub2
-      - redis-master
-    volumes:
-      - "$PWD/data/hub:/data/hub:rw"
-    links:
-      - redis-master
-      - redis-sentinel
-    restart: unless-stopped
-  gateway_ws_2:
-    container_name: rhiaqey-gateway-ws-2
-    image: "rhiaqey/websocket:latest"
-    environment:
-      - ID=${GATEWAY_2_ID}
-      - NAME=${GATEWAY_2_NAME}
-      - NAMESPACE=${GATEWAY_2_NAMESPACE}
-      - PRIVATE_KEY=${GATEWAY_2_PRIVATE_KEY_PATH}
-      - PRIVATE_PORT=${GATEWAY_2_PRIVATE_PORT}
-      - PUBLIC_PORT=${GATEWAY_2_PUBLIC_PORT}
-      - REDIS_ADDRESS=${REDIS_ADDRESS}
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - RUST_LOG=${LOG}
-      - RUST_BACKTRACE=${BACKTRACE}
-    depends_on:
-      - hub1
-      - hub2
-      - redis-master
-    volumes:
-      - "$PWD/data/hub:/data/hub:rw"
-    links:
-      - redis-master
-      - redis-sentinel
-    restart: unless-stopped
-  caddy:
-    container_name: caddy
-    image: "rhiaqey/caddy:latest"
-    environment:
-      - HUB_DOMAIN=${HUB_DOMAIN}
-      - HUB_1_ADMIN_SERVICE=hub1:${HUB_1_PRIVATE_PORT}
-      - HUB_1_SERVICE=hub1:${HUB_1_PUBLIC_PORT}
-      - HUB_2_ADMIN_SERVICE=hub2:${HUB_2_PRIVATE_PORT}
-      - HUB_2_SERVICE=hub2:${HUB_2_PUBLIC_PORT}
-      - GATEWAY_DOMAIN=${GATEWAY_DOMAIN}
-      - GATEWAY_1_SERVICE=gateway_ws_1:${GATEWAY_1_PUBLIC_PORT}
-      - GATEWAY_2_SERVICE=gateway_ws_2:${GATEWAY_2_PUBLIC_PORT}
-      - USER_EMAIL=${USER_EMAIL}
-      - USER_IP=${USER_IP}
+      - "$PWD/data/redis-sentinel-2/tmp:/opt/bitnami/redis-sentinel/tmp:rw"
+      - "$PWD/data/redis-sentinel-2/logs:/opt/bitnami/redis-sentinel/logs:rw"
+      - "$PWD/data/redis-sentinel-2/data:/bitnami/redis-sentinel/data:rw"
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
-    volumes:
-      - $PWD/data/caddy:/data/caddy
-      - $PWD/Caddyfile:/etc/caddy/Caddyfile
-    cap_add:
-      - NET_ADMIN
+      - '26380:26379'
     depends_on:
-      - hub1
-      - hub2
+      - redis-master
     links:
-      - hub1
-      - hub2
-      - gateway_ws_1
-      - gateway_ws_2
+      - redis-master
+      - redis-slave-1
+      #- redis-slave-2
     restart: unless-stopped
+
+  redis-sentinel-3:
+    container_name: redis-sentinel-3
+    image: "rhiaqey/redis-sentinel:latest"
+    environment:
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PORT_NUMBER=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_SENTINEL_MASTER_NAME=mymaster
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    volumes:
+      - "$PWD/data/redis-sentinel-3/tmp:/opt/bitnami/redis-sentinel/tmp:rw"
+      - "$PWD/data/redis-sentinel-3/logs:/opt/bitnami/redis-sentinel/logs:rw"
+      - "$PWD/data/redis-sentinel-3/data:/bitnami/redis-sentinel/data:rw"
+    ports:
+      - '26381:26379'
+    depends_on:
+      - redis-master
+    links:
+      - redis-master
+      - redis-slave-1
+      #- redis-slave-2
+    restart: unless-stopped
+
+  redis-slave-1:
+    container_name: redis-slave-1
+    image: "rhiaqey/redis:latest"
+    environment:
+      - REDIS_PORT_NUMBER=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PORT_NUMBER=6379
+      - REDIS_MASTER_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    volumes:
+      - "$PWD/data/redis-slave-1/tmp:/opt/bitnami/redis/tmp:rw"
+      - "$PWD/data/redis-slave-1/logs:/opt/bitnami/redis/logs:rw"
+      - "$PWD/data/redis-slave-1/data:/bitnami/redis/data:rw"
+    ports:
+      - '6380:6379'
+    depends_on:
+      - redis-master
+    links:
+      - redis-master
+    restart: unless-stopped
+
+#   redis-slave-2:
+#    container_name: redis-slave-2
+#    image: "rhiaqey/redis:latest"
+#    environment:
+#      - REDIS_PORT_NUMBER=${REDIS_PORT}
+#      - REDIS_PASSWORD=${REDIS_PASSWORD}
+#      - REDIS_REPLICATION_MODE=slave
+#      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+#      - REDIS_MASTER_HOST=redis-master
+#      - REDIS_MASTER_PORT_NUMBER=6379
+#      - REDIS_MASTER_PASSWORD=${REDIS_PASSWORD}
+#    volumes:
+#      - "$PWD/data/redis-slave-2/tmp:/opt/bitnami/redis/tmp:rw"
+#      - "$PWD/data/redis-slave-2/logs:/opt/bitnami/redis/logs:rw"
+#      - "$PWD/data/redis-slave-2/data:/bitnami/redis/data:rw"
+#    ports:
+#      - '6381:6379'
+#    depends_on:
+#      - redis-master
+#    links:
+#      - redis-master
+#    restart: unless-stopped
