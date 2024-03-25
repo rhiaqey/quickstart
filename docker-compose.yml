@@ -337,3 +337,38 @@ services:
       - redis-sentinel-2
       - redis-sentinel-3
     restart: unless-stopped
+
+  caddy:
+    container_name: caddy
+    image: "rhiaqey/caddy:latest"
+    environment:
+      - HUB_DOMAIN=${HUB_DOMAIN}
+      - HUB_1_ADMIN_SERVICE=hub1:${HUB_1_PRIVATE_PORT}
+      - HUB_1_SERVICE=hub1:${HUB_1_PUBLIC_PORT}
+      - HUB_2_ADMIN_SERVICE=hub2:${HUB_2_PRIVATE_PORT}
+      - HUB_2_SERVICE=hub2:${HUB_2_PUBLIC_PORT}
+      - GATEWAY_DOMAIN=${GATEWAY_DOMAIN}
+      - GATEWAY_1_SERVICE=gateway-ws-1:${GATEWAY_1_PUBLIC_PORT}
+      - GATEWAY_2_SERVICE=gateway-ws-2:${GATEWAY_2_PUBLIC_PORT}
+      - USER_EMAIL=${USER_EMAIL}
+      - USER_IP=${USER_IP}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - $PWD/data/caddy:/data/caddy
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+    cap_add:
+      - NET_ADMIN
+    depends_on:
+      - hub1
+      - hub2
+      - gateway-ws-1
+      - gateway-ws-2
+    links:
+      - hub1
+      - hub2
+      - gateway-ws-1
+      - gateway-ws-2
+    restart: unless-stopped
