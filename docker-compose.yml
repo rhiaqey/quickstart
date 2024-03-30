@@ -201,6 +201,7 @@ services:
       - REDIS_SENTINEL_ADDRESSES=${REDIS_SENTINEL_ADDRESSES}
     depends_on:
       - ops
+      - hub1
       - redis-master
       - redis-slave-1
       - redis-sentinel-1
