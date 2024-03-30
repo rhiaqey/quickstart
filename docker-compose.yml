@@ -269,6 +269,7 @@ services:
     depends_on:
       - hub1
       - hub2
+      - gateway-ws-1
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
     links:
