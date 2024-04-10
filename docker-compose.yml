@@ -140,7 +140,7 @@ services:
     container_name: rhiaqey-ops
     image: "rhiaqey/hub:latest"
     command: generate-keys --skip --write /data/hub
-    entrypoint: ops
+    entrypoint: rhiaqey-hub
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
     restart: no
@@ -170,7 +170,8 @@ services:
       - redis-sentinel-1
       - redis-sentinel-2
       - redis-sentinel-3
-    entrypoint: hub
+    command: run
+    entrypoint: rhiaqey-hub
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
     links:
@@ -207,7 +208,8 @@ services:
       - redis-sentinel-1
       - redis-sentinel-2
       - redis-sentinel-3
-    entrypoint: hub
+    command: run
+    entrypoint: rhiaqey-hub
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
     links:
