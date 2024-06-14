@@ -138,7 +138,7 @@ services:
 
   ops:
     container_name: rhiaqey-ops
-    image: "rhiaqey/hub:0.1.162"
+    image: "rhiaqey/hub:0.1.163"
     command: generate-keys --skip --write /data/hub
     entrypoint: rhiaqey-hub
     volumes:
@@ -147,7 +147,7 @@ services:
 
   hub1:
     container_name: rhiaqey-hub-1
-    image: "rhiaqey/hub:0.1.162"
+    image: "rhiaqey/hub:0.1.163"
     environment:
       - ID=${HUB_1_ID}
       - PRIVATE_PORT=${HUB_1_PRIVATE_PORT}
@@ -184,7 +184,7 @@ services:
 
   hub2:
     container_name: rhiaqey-hub-2
-    image: "rhiaqey/hub:0.1.162"
+    image: "rhiaqey/hub:0.1.163"
     environment:
       - ID=${HUB_2_ID}
       - PRIVATE_PORT=${HUB_2_PRIVATE_PORT}
