@@ -138,7 +138,7 @@ services:
 
   ops:
     container_name: rhiaqey-ops
-    image: "rhiaqey/hub:0.1.163"
+    image: "rhiaqey/hub:0.1.164"
     command: generate-keys --skip --write /data/hub
     entrypoint: rhiaqey-hub
     volumes:
@@ -147,7 +147,7 @@ services:
 
   hub1:
     container_name: rhiaqey-hub-1
-    image: "rhiaqey/hub:0.1.163"
+    image: "rhiaqey/hub:0.1.164"
     environment:
       - ID=${HUB_1_ID}
       - PRIVATE_PORT=${HUB_1_PRIVATE_PORT}
@@ -184,7 +184,7 @@ services:
 
   hub2:
     container_name: rhiaqey-hub-2
-    image: "rhiaqey/hub:0.1.163"
+    image: "rhiaqey/hub:0.1.164"
     environment:
       - ID=${HUB_2_ID}
       - PRIVATE_PORT=${HUB_2_PRIVATE_PORT}
@@ -222,7 +222,7 @@ services:
 
   gateway-ws-1:
     container_name: rhiaqey-gateway-ws-1
-    image: "rhiaqey/websocket:0.1.85"
+    image: "rhiaqey/websocket:0.1.86"
     environment:
       - ID=${GATEWAY_1_ID}
       - PRIVATE_PORT=${GATEWAY_1_PRIVATE_PORT}
@@ -253,7 +253,7 @@ services:
 
   gateway-ws-2:
     container_name: rhiaqey-gateway-ws-2
-    image: "rhiaqey/websocket:0.1.85"
+    image: "rhiaqey/websocket:0.1.86"
     environment:
       - ID=${GATEWAY_2_ID}
       - PRIVATE_PORT=${GATEWAY_2_PRIVATE_PORT}
@@ -284,7 +284,7 @@ services:
 
   producer-ticker-1:
     container_name: rhiaqey-producer-ticker-1
-    image: "rhiaqey/ticker:0.1.76"
+    image: "rhiaqey/ticker:0.1.77"
     environment:
       - ID=${PRODUCER_1_ID}
       - NAME=${PRODUCER_1_NAME}
@@ -314,7 +314,7 @@ services:
 
   producer-iss-position-1:
     container_name: rhiaqey-producer-iss-position-1
-    image: "rhiaqey/iss-position:0.1.76"
+    image: "rhiaqey/iss-position:0.1.77"
     environment:
       - ID=${PRODUCER_2_ID}
       - NAME=${PRODUCER_2_NAME}
