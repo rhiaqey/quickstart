@@ -29,3 +29,12 @@ docker-compose --version
 ```bash
 sudo reboot # for docker to work
 ```
+## Run on Lightsail
+
+To access a specific container using the private domain of your container service, you must specify the open port of the
+container that will accept your connection request. You do this by formatting the domain of your request as
+`<ServiceName>.service.local:<PortNumber>`, in which `<ServiceName>` is the name of your container service and
+`<PortNumber>` is the open port of the container that you wish to connect to.
+For example, if you create a deployment on your container service named `container-service-1`, and you specify 
+a Redis container with port 6379 open, then you should format the domain of your request as 
+`container-service-1.service.local:6379`.
