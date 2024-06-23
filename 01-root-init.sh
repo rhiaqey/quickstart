@@ -28,7 +28,7 @@ fi
 PASSWORD="$(openssl rand -base64 12)"
 
 # create a user with a home directory
-useradd -m rhiaqey -s /bin/bash -u 1001 -g docker -p "${PASSWORD}"
+useradd -m rhiaqey -s /bin/bash -u 1005 -g docker -p "${PASSWORD}"
 
 sysctl vm.overcommit_memory=1
 
