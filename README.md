@@ -36,11 +36,23 @@ REDIS_PASSWORD # This needs to be something stronger than the default
 # //
 HUB_DOMAIN # Public domain 
 # //
-GATEWAY_3_DOMAIN # Also public facing domain
+GATEWAY_DOMAIN # Also public facing domain
 ```
 
-### 6. Run server
+### 6. Update DNS to point to proper IP(s)
+
+```
+Hub and gateway should be already configured in above step with a public domain and properly configured to point DNS to correct IP.
+```
+
+### 7. Run server
 
 ```sh
 bash 03-user-run.sh
 ```
+
+## Battle tested
+
+* AWS EC2
+* DigitalOcean Droplets
+* Vultr Compute
