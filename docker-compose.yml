@@ -220,7 +220,7 @@ services:
 
   gateway-ws-1:
     container_name: rhiaqey-gateway-ws-1
-    image: "rhiaqey/websocket:0.1.87"
+    image: "rhiaqey/websocket:0.1.93"
     environment:
       - ID=${GATEWAY_1_ID}
       - PRIVATE_PORT=${GATEWAY_1_PRIVATE_PORT}
@@ -251,7 +251,7 @@ services:
 
   gateway-ws-2:
     container_name: rhiaqey-gateway-ws-2
-    image: "rhiaqey/websocket:0.1.87"
+    image: "rhiaqey/websocket:0.1.93"
     environment:
       - ID=${GATEWAY_2_ID}
       - PRIVATE_PORT=${GATEWAY_2_PRIVATE_PORT}
