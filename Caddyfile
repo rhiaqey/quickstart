@@ -1,9 +1,29 @@
 http://{$HUB_DOMAIN} {
+    log
+    encode zstd gzip
+
+    header {
+        Permissions-Policy interest-cohort=()
+        Strict-Transport-Security max-age=31536000;
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        -Server
+    }
+
     redir https://{$HUB_DOMAIN}{uri} permanent
 }
 
 https://{$HUB_DOMAIN} {
     log
+    encode zstd gzip
+
+    header {
+        Permissions-Policy interest-cohort=()
+        Strict-Transport-Security max-age=31536000;
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        -Server
+    }
 
     tls {$USER_EMAIL} {
         #
