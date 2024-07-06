@@ -237,7 +237,7 @@ services:
       - REDIS_SENTINEL_ADDRESSES=${REDIS_SENTINEL_ADDRESSES}
     depends_on:
       - hub1
-      # - hub2
+      - hub2
       - redis-master
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
@@ -268,7 +268,7 @@ services:
       - REDIS_SENTINEL_ADDRESSES=${REDIS_SENTINEL_ADDRESSES}
     depends_on:
       - hub1
-      # - hub2
+      - hub2
       - gateway-ws-1
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
@@ -299,7 +299,7 @@ services:
       - REDIS_SENTINEL_ADDRESSES=${REDIS_SENTINEL_ADDRESSES}
     depends_on:
       - hub1
-      # - hub2
+      - hub2
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
     links:
@@ -329,7 +329,7 @@ services:
       - REDIS_SENTINEL_ADDRESSES=${REDIS_SENTINEL_ADDRESSES}
     depends_on:
       - hub1
-      # - hub2
+      - hub2
     volumes:
       - "$PWD/data/hub:/data/hub:rw"
     links:
@@ -365,12 +365,12 @@ services:
       - NET_ADMIN
     depends_on:
       - hub1
-      # - hub2
+      - hub2
       - gateway-ws-1
       - gateway-ws-2
     links:
       - hub1
-      # - hub2
+      - hub2
       - gateway-ws-1
       - gateway-ws-2
     restart: unless-stopped
