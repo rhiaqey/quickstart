@@ -136,7 +136,7 @@ services:
 
   ops:
     container_name: rhiaqey-ops
-    image: "rhiaqey/hub:0.1.210"
+    image: "rhiaqey/hub:0.1.211"
     command: generate-keys --skip --write /data/hub
     entrypoint: rhiaqey-hub
     volumes:
@@ -145,7 +145,7 @@ services:
 
   hub1:
     container_name: rhiaqey-hub-1
-    image: "rhiaqey/hub:0.1.210"
+    image: "rhiaqey/hub:0.1.211"
     environment:
       - ID=${HUB_1_ID}
       - PRIVATE_PORT=${HUB_1_PRIVATE_PORT}
@@ -182,7 +182,7 @@ services:
 
   hub2:
     container_name: rhiaqey-hub-2
-    image: "rhiaqey/hub:0.1.210"
+    image: "rhiaqey/hub:0.1.211"
     environment:
       - ID=${HUB_2_ID}
       - PRIVATE_PORT=${HUB_2_PRIVATE_PORT}
@@ -374,3 +374,35 @@ services:
       - gateway-ws-1
       - gateway-ws-2
     restart: unless-stopped
+
+  otel-collector:
+    container_name: otel-collector
+    image: "otel/opentelemetry-collector-contrib:0.104.0"
+    volumes:
+      - $PWD/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+    environment:
+      - PROMETHEUS_OPEN_OBSERVE_ENDPOINT=http://open-observe:5080/api/default
+      - PROMETHEUS_OPEN_OBSERVE_AUTH="Basic cm9vdEBleGFtcGxlLmNvbToxcW5DN3RHRTJlSTVGcDly"
+      - PROMETHEUS_OPEN_OBSERVE_STREAM_NAME=default
+    ports:
+      - 1888:1888 # pprof extension
+      - 8888:8888 # Prometheus' metrics exposed by the Collector
+      - 8889:8889 # Prometheus exporter metrics
+      - 13133:13133 # health_check extension
+      - 4317:4317 # OTLP gRPC receiver
+      - 4318:4318 # OTLP http receiver
+      - 55679:55679 # zpages extension
+    restart: unless-stopped
+    links:
+      - open-observe
+      - hub1
+      - hub2
+
+  open-observe:
+    container_name: open-observe
+    image: "public.ecr.aws/zinclabs/openobserve:latest"
+    environment:
+      - ZO_ROOT_USER_EMAIL=root@example.com
+      - ZO_ROOT_USER_PASSWORD=Complexpass#123
+    ports:
+      - "5080:5080"
