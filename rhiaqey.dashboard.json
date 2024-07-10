@@ -1,0 +1,209 @@
+{
+  "version": 4,
+  "dashboardId": "7216688401875992581",
+  "title": "Rhiaqey",
+  "description": "",
+  "role": "",
+  "owner": "",
+  "created": "2024-07-10T06:30:47.818Z",
+  "tabs": [
+    {
+      "tabId": "default",
+      "name": "Default",
+      "panels": [
+        {
+          "id": "Panel_ID5059410",
+          "type": "line",
+          "title": "Total services",
+          "description": "",
+          "config": {
+            "show_legends": true,
+            "legends_position": null,
+            "base_map": {
+              "type": "osm"
+            },
+            "map_view": {
+              "zoom": 1,
+              "lat": 0,
+              "lng": 0
+            }
+          },
+          "queryType": "promql",
+          "queries": [
+            {
+              "query": "count(up)",
+              "customQuery": true,
+              "fields": {
+                "stream": "",
+                "stream_type": "metrics",
+                "x": [],
+                "y": [],
+                "z": [],
+                "filter": []
+              },
+              "config": {
+                "promql_legend": "",
+                "layer_type": "scatter",
+                "weight_fixed": 1,
+                "limit": 0,
+                "min": 0,
+                "max": 100
+              }
+            }
+          ],
+          "layout": {
+            "x": 0,
+            "y": 0,
+            "w": 24,
+            "h": 9,
+            "i": 1
+          }
+        },
+        {
+          "id": "Panel_ID1026010",
+          "type": "line",
+          "title": "Total active hub clients",
+          "description": "",
+          "config": {
+            "show_legends": true,
+            "legends_position": null,
+            "base_map": {
+              "type": "osm"
+            },
+            "map_view": {
+              "zoom": 1,
+              "lat": 0,
+              "lng": 0
+            }
+          },
+          "queryType": "promql",
+          "queries": [
+            {
+              "query": "sum(rq_total_clients)",
+              "customQuery": true,
+              "fields": {
+                "stream": "",
+                "stream_type": "metrics",
+                "x": [],
+                "y": [],
+                "z": [],
+                "filter": []
+              },
+              "config": {
+                "promql_legend": "",
+                "layer_type": "scatter",
+                "weight_fixed": 1,
+                "limit": 0,
+                "min": 0,
+                "max": 100
+              }
+            }
+          ],
+          "layout": {
+            "x": 0,
+            "y": 9,
+            "w": 24,
+            "h": 9,
+            "i": 3
+          }
+        },
+        {
+          "id": "Panel_ID8791910",
+          "type": "line",
+          "title": "Total hub channels",
+          "description": "",
+          "config": {
+            "show_legends": true,
+            "legends_position": null,
+            "base_map": {
+              "type": "osm"
+            },
+            "map_view": {
+              "zoom": 1,
+              "lat": 0,
+              "lng": 0
+            }
+          },
+          "queryType": "promql",
+          "queries": [
+            {
+              "query": "sum(rq_total_channels{kind=\"hub\"}) / count(rq_total_channels{kind=\"hub\"})",
+              "customQuery": true,
+              "fields": {
+                "stream": "",
+                "stream_type": "metrics",
+                "x": [],
+                "y": [],
+                "z": [],
+                "filter": []
+              },
+              "config": {
+                "promql_legend": "",
+                "layer_type": "scatter",
+                "weight_fixed": 1,
+                "limit": 0,
+                "min": 0,
+                "max": 100
+              }
+            }
+          ],
+          "layout": {
+            "x": 24,
+            "y": 0,
+            "w": 24,
+            "h": 9,
+            "i": 4
+          }
+        },
+        {
+          "id": "Panel_ID8983010",
+          "type": "line",
+          "title": "Total external gateway connections",
+          "description": "",
+          "config": {
+            "show_legends": true,
+            "legends_position": null,
+            "base_map": {
+              "type": "osm"
+            },
+            "map_view": {
+              "zoom": 1,
+              "lat": 0,
+              "lng": 0
+            }
+          },
+          "queryType": "promql",
+          "queries": [
+            {
+              "query": "sum(rq_total_connections)",
+              "customQuery": true,
+              "fields": {
+                "stream": "",
+                "stream_type": "metrics",
+                "x": [],
+                "y": [],
+                "z": [],
+                "filter": []
+              },
+              "config": {
+                "promql_legend": "",
+                "layer_type": "scatter",
+                "weight_fixed": 1,
+                "limit": 0,
+                "min": 0,
+                "max": 100
+              }
+            }
+          ],
+          "layout": {
+            "x": 24,
+            "y": 9,
+            "w": 24,
+            "h": 9,
+            "i": 5
+          }
+        }
+      ]
+    }
+  ]
+}
