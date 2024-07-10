@@ -380,9 +380,9 @@ services:
       - gateway-ws-2
     restart: unless-stopped
 
-  fluent-bit-collector:
+  metrics-collector:
     container_name: fluent-bit
-    image: "bitnami/fluent-bit:3.1.0-debian-12-r0"
+    image: "rhiaqey/fluent-bit:3.1.0"
     volumes:
       - $PWD/fluent-bit.conf:/opt/bitnami/fluent-bit/conf/fluent-bit.conf
     environment:
@@ -391,7 +391,7 @@ services:
       - PROMETHEUS_OPEN_OBSERVE_URI=${PROMETHEUS_OPEN_OBSERVE_URI}
       - PROMETHEUS_OPEN_OBSERVE_AUTH=${PROMETHEUS_OPEN_OBSERVE_AUTH}
     links:
-      - open-observe
+      # - open-observe
       - hub1
       - hub2
       - gateway-ws-1
@@ -426,14 +426,14 @@ services:
 #      - gateway-ws-1
 #      - gateway-ws-2
 
-  open-observe:
-    container_name: open-observe
-    image: "openobserve/openobserve:v0.10.8-rc4"
-    environment:
-      - ZO_TELEMETRY=false
-      - ZO_USAGE_ORG=rhiaqey
-      - ZO_ROOT_USER_EMAIL=${USER_EMAIL}
-      - ZO_ROOT_USER_PASSWORD=${USER_PASSWORD}
-      # - ZO_USAGE_REPORTING_CREDS=${PROMETHEUS_OPEN_OBSERVE_AUTH}
-    ports:
-      - "5080:5080"
+#  open-observe:
+#    container_name: open-observe
+#    image: "openobserve/openobserve:v0.10.8-rc4"
+#    environment:
+#      - ZO_TELEMETRY=false
+#      - ZO_USAGE_ORG=rhiaqey
+#      - ZO_ROOT_USER_EMAIL=${USER_EMAIL}
+#      - ZO_ROOT_USER_PASSWORD=${USER_PASSWORD}
+#      # - ZO_USAGE_REPORTING_CREDS=${PROMETHEUS_OPEN_OBSERVE_AUTH}
+#    ports:
+#      - "5080:5080"
