@@ -380,34 +380,51 @@ services:
       - gateway-ws-2
     restart: unless-stopped
 
-  otel-collector:
-    container_name: otel
-    image: "otel/opentelemetry-collector-contrib:0.104.0"
+  fluent-bit-collector:
+    container_name: fluent-bit
+    image: "bitnami/fluent-bit:3.1.0-debian-12-r0"
     volumes:
-      - $PWD/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+      - $PWD/fluent-bit.conf:/opt/bitnami/fluent-bit/conf/fluent-bit.conf
     environment:
-      - PROMETHEUS_OPEN_OBSERVE_ENDPOINT=${PROMETHEUS_OPEN_OBSERVE_ENDPOINT}
+      - PROMETHEUS_OPEN_OBSERVE_HOST=${PROMETHEUS_OPEN_OBSERVE_HOST}
+      - PROMETHEUS_OPEN_OBSERVE_PORT=${PROMETHEUS_OPEN_OBSERVE_PORT}
+      - PROMETHEUS_OPEN_OBSERVE_URI=${PROMETHEUS_OPEN_OBSERVE_URI}
       - PROMETHEUS_OPEN_OBSERVE_AUTH=${PROMETHEUS_OPEN_OBSERVE_AUTH}
-      - PROMETHEUS_OPEN_OBSERVE_STREAM_NAME=${PROMETHEUS_OPEN_OBSERVE_STREAM_NAME}
-      - HUB_1_ADDRESS=hub1:${HUB_1_PRIVATE_PORT}
-      - HUB_2_ADDRESS=hub2:${HUB_2_PRIVATE_PORT}
-      - GATEWAY_1_ADDRESS=gateway-ws-1:${GATEWAY_1_PRIVATE_PORT}
-      - GATEWAY_2_ADDRESS=gateway-ws-2:${GATEWAY_2_PRIVATE_PORT}
-        #ports:
-    #  - 1888:1888 # pprof extension
-    #  - 8888:8888 # Prometheus' metrics exposed by the Collector
-    #  - 8889:8889 # Prometheus exporter metrics
-    #  - 13133:13133 # health_check extension
-    #  - 4317:4317 # OTLP gRPC receiver
-    #  - 4318:4318 # OTLP http receiver
-    #  - 55679:55679 # zpages extension
-    restart: unless-stopped
     links:
       - open-observe
       - hub1
       - hub2
       - gateway-ws-1
       - gateway-ws-2
+
+#  otel-collector:
+#    container_name: otel
+#    image: "otel/opentelemetry-collector-contrib:0.104.0"
+#    volumes:
+#      - $PWD/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+#    environment:
+#      - PROMETHEUS_OPEN_OBSERVE_ENDPOINT=${PROMETHEUS_OPEN_OBSERVE_ENDPOINT}
+#      - PROMETHEUS_OPEN_OBSERVE_AUTH=${PROMETHEUS_OPEN_OBSERVE_AUTH}
+#      - PROMETHEUS_OPEN_OBSERVE_STREAM_NAME=${PROMETHEUS_OPEN_OBSERVE_STREAM_NAME}
+#      - HUB_1_ADDRESS=hub1:${HUB_1_PRIVATE_PORT}
+#      - HUB_2_ADDRESS=hub2:${HUB_2_PRIVATE_PORT}
+#      - GATEWAY_1_ADDRESS=gateway-ws-1:${GATEWAY_1_PRIVATE_PORT}
+#      - GATEWAY_2_ADDRESS=gateway-ws-2:${GATEWAY_2_PRIVATE_PORT}
+#        #ports:
+#    #  - 1888:1888 # pprof extension
+#    #  - 8888:8888 # Prometheus' metrics exposed by the Collector
+#    #  - 8889:8889 # Prometheus exporter metrics
+#    #  - 13133:13133 # health_check extension
+#    #  - 4317:4317 # OTLP gRPC receiver
+#    #  - 4318:4318 # OTLP http receiver
+#    #  - 55679:55679 # zpages extension
+#    restart: unless-stopped
+#    links:
+#      - open-observe
+#      - hub1
+#      - hub2
+#      - gateway-ws-1
+#      - gateway-ws-2
 
   open-observe:
     container_name: open-observe
