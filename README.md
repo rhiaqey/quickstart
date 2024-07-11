@@ -2,7 +2,7 @@
 
 ## AWS
 
-For AWS installations first check [this AWS guide](AWS.md).
+For AWS installations, first check [this AWS guide](AWS.md).
 
 ## Steps
 
