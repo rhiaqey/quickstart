@@ -1,5 +1,9 @@
 # Quickstart
 
+## AWS
+
+For AWS installations first check [this AWS guide](AWS.md).
+
 ## Steps
 
 ### 1. As root run
