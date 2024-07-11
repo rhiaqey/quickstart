@@ -365,7 +365,7 @@ services:
       - "443:443/udp"
     volumes:
       - $PWD/data/caddy:/data/caddy
-      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/caddy/Caddyfile:/etc/caddy/Caddyfile
     cap_add:
       - NET_ADMIN
     depends_on:
@@ -384,7 +384,7 @@ services:
     container_name: fluent-bit
     image: "rhiaqey/fluent-bit:3.1.0"
     volumes:
-      - $PWD/fluent-bit.conf:/opt/bitnami/fluent-bit/conf/fluent-bit.conf
+      - $PWD/fluent-bit/fluent-bit.conf:/opt/bitnami/fluent-bit/conf/fluent-bit.conf
     environment:
       - PROMETHEUS_OPEN_OBSERVE_HOST=${PROMETHEUS_OPEN_OBSERVE_HOST}
       - PROMETHEUS_OPEN_OBSERVE_PORT=${PROMETHEUS_OPEN_OBSERVE_PORT}

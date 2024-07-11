@@ -88,5 +88,5 @@ chmod o+w $(pwd)/data/caddy
 file=$(pwd)/.env
 if [ ! -f $file ]; then
     # echo "File $file does not exist"
-    cp $(pwd)/env.template $file
+    cp $(pwd)/env/env.template $file
 fi
