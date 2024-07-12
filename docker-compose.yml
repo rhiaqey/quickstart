@@ -222,7 +222,7 @@ services:
 
   gateway-ws-1:
     container_name: rhiaqey-gateway-ws-1
-    image: "rhiaqey/websocket:0.1.104"
+    image: "rhiaqey/websocket:0.1.105"
     environment:
       - ID=${GATEWAY_1_ID}
       - ORGANIZATION=${ORGANIZATION}
@@ -254,7 +254,7 @@ services:
 
   gateway-ws-2:
     container_name: rhiaqey-gateway-ws-2
-    image: "rhiaqey/websocket:0.1.104"
+    image: "rhiaqey/websocket:0.1.105"
     environment:
       - ID=${GATEWAY_2_ID}
       - ORGANIZATION=${ORGANIZATION}
