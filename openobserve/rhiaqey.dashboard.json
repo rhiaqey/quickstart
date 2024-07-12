@@ -1,11 +1,11 @@
 {
   "version": 4,
-  "dashboardId": "7216688401875992581",
+  "dashboardId": "7217525657054478339",
   "title": "Rhiaqey",
   "description": "",
   "role": "",
   "owner": "",
-  "created": "2024-07-10T06:30:47.818Z",
+  "created": "2024-07-12T14:26:08.209Z",
   "tabs": [
     {
       "tabId": "default",
@@ -14,7 +14,7 @@
         {
           "id": "Panel_ID5059410",
           "type": "metric",
-          "title": "Total services",
+          "title": "Total rhiaqey services",
           "description": "",
           "config": {
             "show_legends": true,
@@ -47,7 +47,7 @@
           "queryType": "promql",
           "queries": [
             {
-              "query": "ceil(count(up))",
+              "query": "ceil(count(rq_up))",
               "customQuery": true,
               "fields": {
                 "stream": "process_cpu_seconds_total",
