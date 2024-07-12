@@ -28,15 +28,15 @@ jobs:
         with:
           fallback: 1.0.0 # Optional fallback tag to use when no tag can be found
 
-      - name: 'Get next minor version'
-        id: next
-        uses: "WyriHaximus/github-action-next-semvers@v1"
-        with:
-          version: ${{ steps.prev.outputs.tag }}
-
-      - name: Create a GitHub release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ steps.next.outputs.patch }}
-          name: Release ${{ steps.next.outputs.patch }}
-          commit: Release ${{ steps.next.outputs.patch }}
+#      - name: 'Get next minor version'
+#        id: next
+#        uses: "WyriHaximus/github-action-next-semvers@v1"
+#        with:
+#          version: ${{ steps.prev.outputs.tag }}
+#
+#      - name: Create a GitHub release
+#        uses: ncipollo/release-action@v1
+#        with:
+#          tag: ${{ steps.next.outputs.patch }}
+#          name: Release ${{ steps.next.outputs.patch }}
+#          commit: Release ${{ steps.next.outputs.patch }}
