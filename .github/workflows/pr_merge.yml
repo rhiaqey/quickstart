@@ -7,6 +7,8 @@ on:
 
 env:
   CI: true
+  TAG_NAME: "GitHub Actions"
+  TAG_EMAIL: "github-actions@users.noreply.github.com"
 
 permissions:
   contents: write
@@ -20,6 +22,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Git setup
+        run: |
+          git config user.name "$TAG_NAME"
+          git config user.email "$TAG_EMAIL"
+
+      - name: Extract git branch
+        run: |
+          # Short name for current branch. For PRs, use target branch (base ref)
+          GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
+          echo "GIT_BRANCH=$GIT_BRANCH" >> $GITHUB_ENV
+
       - name: 'Get latest tag'
         id: prev
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
@@ -32,9 +45,23 @@ jobs:
         with:
           version: ${{ steps.prev.outputs.tag }}
 
-      - name: Create a GitHub release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: v${{ steps.next.outputs.patch }}
+      - name: Git push
+        run: |
+          echo "Current branch $GIT_BRANCH"
+          
+          git commit --allow-empty -m "Release ${{ steps.next.outputs.patch }}
+
+          [skip ci]
+          "
+          
+          git tag ${{ steps.next.outputs.patch }}
+
+          git push origin $GIT_BRANCH
+          git push origin $GIT_BRANCH --tags
+
+      #- name: Create a GitHub release
+        #uses: ncipollo/release-action@v1
+        #with:
+          #tag: ${{ steps.next.outputs.patch }}
           # name: Release ${{ steps.next.outputs.patch }}
-          commit: Release ${{ steps.next.outputs.patch }}
+          #commit: Release ${{ steps.next.outputs.patch }}
