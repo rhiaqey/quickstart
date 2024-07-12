@@ -79,7 +79,7 @@
         },
         {
           "id": "Panel_ID1026010",
-          "type": "line",
+          "type": "area",
           "title": "Total active hub clients",
           "description": "",
           "config": {
@@ -100,7 +100,7 @@
               "query": "sum(rq_total_clients)",
               "customQuery": true,
               "fields": {
-                "stream": "",
+                "stream": "process_cpu_seconds_total",
                 "stream_type": "metrics",
                 "x": [],
                 "y": [],
@@ -118,12 +118,14 @@
             }
           ],
           "layout": {
-            "x": 0,
+            "x": 16,
             "y": 10,
-            "w": 48,
+            "w": 32,
             "h": 16,
             "i": 3
-          }
+          },
+          "htmlContent": "",
+          "markdownContent": ""
         },
         {
           "id": "Panel_ID8791910",
@@ -221,6 +223,56 @@
             "w": 16,
             "h": 10,
             "i": 5
+          },
+          "htmlContent": "",
+          "markdownContent": ""
+        },
+        {
+          "id": "Panel_ID3235510",
+          "type": "metric",
+          "title": "Total hub clients",
+          "description": "",
+          "config": {
+            "show_legends": true,
+            "legends_position": null,
+            "base_map": {
+              "type": "osm"
+            },
+            "map_view": {
+              "zoom": 1,
+              "lat": 0,
+              "lng": 0
+            }
+          },
+          "queryType": "promql",
+          "queries": [
+            {
+              "query": "sum(rq_total_clients{})",
+              "customQuery": true,
+              "fields": {
+                "stream": "process_cpu_seconds_total",
+                "stream_type": "metrics",
+                "x": [],
+                "y": [],
+                "z": [],
+                "filter": []
+              },
+              "config": {
+                "promql_legend": "",
+                "layer_type": "scatter",
+                "weight_fixed": 1,
+                "limit": 0,
+                "min": 0,
+                "max": 100
+              }
+            }
+          ],
+          "layout": {
+            "x": 0,
+            "y": 10,
+            "w": 16,
+            "h": 16,
+            "i": 6
           },
           "htmlContent": "",
           "markdownContent": ""
