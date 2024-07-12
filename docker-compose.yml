@@ -382,7 +382,7 @@ services:
 
   metrics-collector:
     container_name: fluent-bit
-    image: "rhiaqey/fluent-bit:3.1.0"
+    image: "rhiaqey/fluent-bit:3.1.2"
     volumes:
       - $PWD/fluent-bit/fluent-bit.conf:/opt/bitnami/fluent-bit/conf/fluent-bit.conf
     environment:
