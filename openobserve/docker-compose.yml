@@ -8,5 +8,6 @@ services:
       - ZO_ROOT_USER_EMAIL=${USER_EMAIL}
       - ZO_ROOT_USER_PASSWORD=${USER_PASSWORD}
       # - ZO_USAGE_REPORTING_CREDS=${PROMETHEUS_OPEN_OBSERVE_AUTH}
+      - TZ: "Zulu"
     ports:
       - "5080:5080"
