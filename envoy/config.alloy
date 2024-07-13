@@ -1,0 +1,28 @@
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+prometheus.scrape "custom_targets" {
+  targets = [
+    {
+      __address__      = "0.0.0.0:3001",
+      __metrics_path__ = "/metrics",
+    },
+  ]
+
+  scrape_interval = "15s"
+
+  forward_to = [prometheus.remote_write.default.receiver]
+}
+
+prometheus.remote_write "default" {
+  endpoint {
+    url = "http://0.0.0.0:5080/api/default/prometheus/api/v1/write"
+
+    basic_auth {
+      username = "root@example.com"
+      password = "CXROcQKM93leOOjy"
+    }
+  }
+}
