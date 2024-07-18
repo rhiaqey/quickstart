@@ -30,6 +30,8 @@ jobs:
       - name: Image pull test
         run: |
           docker-compose pull
+          cd otel && docker-compose pull
+          cd openobserve && docker-compose pull
 
       - name: Git setup
         run: |
