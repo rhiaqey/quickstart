@@ -8,6 +8,6 @@ services:
       - ZO_ROOT_USER_EMAIL=email@rhiaqey.com
       - ZO_ROOT_USER_PASSWORD=password
       # - ZO_USAGE_REPORTING_CREDS=${PROMETHEUS_OPEN_OBSERVE_AUTH}
-      - TZ: "Zulu"
+      - TZ=Zulu
     ports:
       - "5080:5080"
