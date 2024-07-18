@@ -22,9 +22,3 @@ services:
     #  - 4318:4318 # OTLP http receiver
     #  - 55679:55679 # zpages extension
     restart: unless-stopped
-    links:
-      - open-observe
-      - hub1
-      - hub2
-      - gateway-ws-1
-      - gateway-ws-2
