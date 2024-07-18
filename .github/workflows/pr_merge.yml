@@ -27,11 +27,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Image pull test
+      - name: Image pull
         run: |
           docker-compose pull
-          cd otel && docker-compose pull
-          cd openobserve && docker-compose pull
+
+      - name: Image pull otel
+        working-directory: 'otel'
+        run: |
+          docker-compose pull
+
+      - name: Image pull openobserve
+        working-directory: 'openobserve'
+        run: |
+          docker-compose pull
 
       - name: Git setup
         run: |
