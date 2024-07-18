@@ -22,6 +22,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Docker compose setup
+        uses: KengoTODA/actions-setup-docker-compose@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Image pull test
+        run: |
+          docker-compose pull
+
       - name: Git setup
         run: |
           git config user.name "$TAG_NAME"
