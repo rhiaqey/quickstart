@@ -136,7 +136,7 @@ services:
 
   ops:
     container_name: rhiaqey-ops
-    image: "rhiaqey/hub:0.1.223"
+    image: "rhiaqey/hub:0.1.224"
     command: generate-keys --skip --write /data/hub
     entrypoint: rhiaqey-hub
     volumes:
@@ -145,14 +145,14 @@ services:
 
   hub1:
     container_name: rhiaqey-hub-1
-    image: "rhiaqey/hub:0.1.223"
+    image: "rhiaqey/hub:0.1.224"
     environment:
       - ID=${HUB_1_ID}
       - ORGANIZATION=${ORGANIZATION}
       - PRIVATE_PORT=${HUB_1_PRIVATE_PORT}
       - PUBLIC_PORT=${HUB_1_PUBLIC_PORT}
       - NAME=${HUB_NAME}
-      - NAMESPACE=${HUB_NAMESPACE}
+      - NAMESPACE=${NAMESPACE}
       - PUBLIC_KEY=${HUB_PUBLIC_KEY_PATH}
       - PRIVATE_KEY=${HUB_PRIVATE_KEY_PATH}
       - RUST_LOG=${LOG}
@@ -183,14 +183,14 @@ services:
 
   hub2:
     container_name: rhiaqey-hub-2
-    image: "rhiaqey/hub:0.1.223"
+    image: "rhiaqey/hub:0.1.224"
     environment:
       - ID=${HUB_2_ID}
       - ORGANIZATION=${ORGANIZATION}
       - PRIVATE_PORT=${HUB_2_PRIVATE_PORT}
       - PUBLIC_PORT=${HUB_2_PUBLIC_PORT}
       - NAME=${HUB_NAME}
-      - NAMESPACE=${HUB_NAMESPACE}
+      - NAMESPACE=${NAMESPACE}
       - PUBLIC_KEY=${HUB_PUBLIC_KEY_PATH}
       - PRIVATE_KEY=${HUB_PRIVATE_KEY_PATH}
       - RUST_LOG=${LOG}
@@ -222,14 +222,14 @@ services:
 
   gateway-ws-1:
     container_name: rhiaqey-gateway-ws-1
-    image: "rhiaqey/websocket:0.1.107"
+    image: "rhiaqey/websocket:0.1.109"
     environment:
       - ID=${GATEWAY_1_ID}
       - ORGANIZATION=${ORGANIZATION}
       - PRIVATE_PORT=${GATEWAY_1_PRIVATE_PORT}
       - PUBLIC_PORT=${GATEWAY_1_PUBLIC_PORT}
       - NAME=${GATEWAY_NAME}
-      - NAMESPACE=${GATEWAY_NAMESPACE}
+      - NAMESPACE=${NAMESPACE}
       - PRIVATE_KEY=${GATEWAY_PRIVATE_KEY_PATH}
       - RUST_LOG=${LOG}
       - RUST_BACKTRACE=${BACKTRACE}
@@ -254,14 +254,14 @@ services:
 
   gateway-ws-2:
     container_name: rhiaqey-gateway-ws-2
-    image: "rhiaqey/websocket:0.1.107"
+    image: "rhiaqey/websocket:0.1.109"
     environment:
       - ID=${GATEWAY_2_ID}
       - ORGANIZATION=${ORGANIZATION}
       - PRIVATE_PORT=${GATEWAY_2_PRIVATE_PORT}
       - PUBLIC_PORT=${GATEWAY_2_PUBLIC_PORT}
       - NAME=${GATEWAY_NAME}
-      - NAMESPACE=${GATEWAY_NAMESPACE}
+      - NAMESPACE=${NAMESPACE}
       - PRIVATE_KEY=${GATEWAY_PRIVATE_KEY_PATH}
       - RUST_LOG=${LOG}
       - RUST_BACKTRACE=${BACKTRACE}
@@ -286,12 +286,12 @@ services:
 
   producer-ticker-1:
     container_name: rhiaqey-producer-ticker-1
-    image: "rhiaqey/ticker:0.1.98"
+    image: "rhiaqey/ticker:0.1.100"
     environment:
       - ID=${PRODUCER_1_ID}
       - ORGANIZATION=${ORGANIZATION}
       - NAME=${PRODUCER_1_NAME}
-      - NAMESPACE=${PRODUCER_1_NAMESPACE}
+      - NAMESPACE=${NAMESPACE}
       - PRIVATE_KEY=${PRODUCER_1_PRIVATE_KEY_PATH}
       - PRIVATE_PORT=${PRODUCER_1_PRIVATE_PORT}
       - PUBLIC_PORT=${PRODUCER_1_PUBLIC_PORT}
@@ -317,11 +317,11 @@ services:
 
 #  producer-iss-position-1:
 #    container_name: rhiaqey-producer-iss-position-1
-#    image: "rhiaqey/iss-position:0.1.88"
+#    image: "rhiaqey/iss-position:0.1.100"
 #    environment:
 #      - ID=${PRODUCER_2_ID}
 #      - NAME=${PRODUCER_2_NAME}
-#      - NAMESPACE=${PRODUCER_2_NAMESPACE}
+#      - NAMESPACE=${NAMESPACE}
 #      - PRIVATE_KEY=${PRODUCER_2_PRIVATE_KEY_PATH}
 #      - PRIVATE_PORT=${PRODUCER_2_PRIVATE_PORT}
 #      - PUBLIC_PORT=${PRODUCER_2_PUBLIC_PORT}
@@ -382,50 +382,46 @@ services:
 
   metrics-collector:
     container_name: fluent-bit
-    image: "rhiaqey/fluent-bit:3.1.2"
+    image: "rhiaqey/fluent-bit:3.1.3"
     volumes:
+      - $PWD/fluent-bit/functions.lua:/opt/bitnami/fluent-bit/conf/functions.lua
       - $PWD/fluent-bit/fluent-bit.conf:/opt/bitnami/fluent-bit/conf/fluent-bit.conf
     environment:
+      - NODE=${NODE}
+      - NAMESPACE=${NAMESPACE}
+      - ORGANIZATION=${ORGANIZATION}
+      - HUB_NAME=${HUB_NAME}
       - PROMETHEUS_OPEN_OBSERVE_HOST=${PROMETHEUS_OPEN_OBSERVE_HOST}
       - PROMETHEUS_OPEN_OBSERVE_PORT=${PROMETHEUS_OPEN_OBSERVE_PORT}
       - PROMETHEUS_OPEN_OBSERVE_URI=${PROMETHEUS_OPEN_OBSERVE_URI}
       - PROMETHEUS_OPEN_OBSERVE_AUTH=${PROMETHEUS_OPEN_OBSERVE_AUTH}
       - PROMETHEUS_OPEN_OBSERVER_TLS=${PROMETHEUS_OPEN_OBSERVER_TLS}
+      - HUB_1_HOST=hub1
       - HUB_1_PORT=${HUB_1_PRIVATE_PORT}
-      - HUB_1_ID=${HUB_1_ID}
-      - HUB_1_NAME=${HUB_NAME}
-      - HUB_1_NAMESPACE=${HUB_NAMESPACE}
-      - HUB_1_ORGANIZATION=${ORGANIZATION}
+      - HUB_2_HOST=hub2
       - HUB_2_PORT=${HUB_2_PRIVATE_PORT}
-      - HUB_2_ID=${HUB_2_ID}
-      - HUB_2_NAME=${HUB_NAME}
-      - HUB_2_NAMESPACE=${HUB_NAMESPACE}
-      - HUB_2_ORGANIZATION=${ORGANIZATION}
+      - GATEWAY_1_HOST=gateway-ws-1
       - GATEWAY_1_PORT=${GATEWAY_1_PRIVATE_PORT}
-      - GATEWAY_1_ID=${GATEWAY_1_ID}
       - GATEWAY_1_NAME=${GATEWAY_NAME}
-      - GATEWAY_1_NAMESPACE=${GATEWAY_NAMESPACE}
-      - GATEWAY_1_ORGANIZATION=${ORGANIZATION}
+      - GATEWAY_2_HOST=gateway-ws-2
       - GATEWAY_2_PORT=${GATEWAY_2_PRIVATE_PORT}
-      - GATEWAY_2_ID=${GATEWAY_2_ID}
       - GATEWAY_2_NAME=${GATEWAY_NAME}
-      - GATEWAY_2_NAMESPACE=${GATEWAY_NAMESPACE}
-      - GATEWAY_2_ORGANIZATION=${ORGANIZATION}
     links:
       # - open-observe
       - hub1
       - hub2
       - gateway-ws-1
       - gateway-ws-2
+      - open-observe
 
-#  open-observe:
-#    container_name: open-observe
-#    image: "openobserve/openobserve:v0.10.8-rc4"
-#    environment:
-#      - ZO_TELEMETRY=false
-#      - ZO_USAGE_ORG=rhiaqey
-#      - ZO_ROOT_USER_EMAIL=${USER_EMAIL}
-#      - ZO_ROOT_USER_PASSWORD=${USER_PASSWORD}
-#      # - ZO_USAGE_REPORTING_CREDS=${PROMETHEUS_OPEN_OBSERVE_AUTH}
-#    ports:
-#      - "5080:5080"
+  open-observe:
+    container_name: open-observe
+    image: "openobserve/openobserve:v0.10.8-rc5"
+    environment:
+      - ZO_TELEMETRY=false
+      - ZO_USAGE_ORG=rhiaqey
+      - ZO_ROOT_USER_EMAIL=${USER_EMAIL}
+      - ZO_ROOT_USER_PASSWORD=${USER_PASSWORD}
+      # - ZO_USAGE_REPORTING_CREDS=${PROMETHEUS_OPEN_OBSERVE_AUTH}
+    ports:
+      - "5080:5080"
