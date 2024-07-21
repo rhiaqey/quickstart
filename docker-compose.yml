@@ -412,7 +412,7 @@ services:
       - hub2
       - gateway-ws-1
       - gateway-ws-2
-      - open-observe
+#      - open-observe
 
 #  open-observe:
 #    container_name: open-observe
