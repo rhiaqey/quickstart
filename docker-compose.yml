@@ -286,7 +286,7 @@ services:
 
   producer-ticker-1:
     container_name: rhiaqey-producer-ticker-1
-    image: "rhiaqey/ticker:0.1.105"
+    image: "rhiaqey/ticker:0.1.106"
     environment:
       - ID=${PRODUCER_1_ID}
       - ORGANIZATION=${ORGANIZATION}
@@ -317,7 +317,7 @@ services:
 
 #  producer-iss-position-1:
 #    container_name: rhiaqey-producer-iss-position-1
-#    image: "rhiaqey/iss-position:0.1.105"
+#    image: "rhiaqey/iss-position:0.1.106"
 #    environment:
 #      - ID=${PRODUCER_2_ID}
 #      - NAME=${PRODUCER_2_NAME}
