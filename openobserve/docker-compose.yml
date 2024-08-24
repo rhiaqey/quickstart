@@ -1,7 +1,7 @@
 services:
   open-observe:
     container_name: open-observe
-    image: "openobserve/openobserve:v0.10.9-rc2"
+    image: "openobserve/openobserve:v0.11.0-rc2"
     environment:
       - ZO_TELEMETRY=false
       - ZO_USAGE_ORG=rhiaqey

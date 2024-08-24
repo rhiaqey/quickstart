@@ -48,6 +48,11 @@ https://{$HUB_DOMAIN} {
         header Upgrade    websocket
     }
 
+    # SSE block
+    @sse {
+        path /sse*
+    }
+
     # snapshot block
     @snapshot {
         path /snapshot*
@@ -76,6 +81,17 @@ https://{$HUB_DOMAIN} {
 
     # Allow /snapshot
     handle @snapshot {
+        # works fine without it
+       forward_auth {$HUB_1_ADMIN_SERVICE} {$HUB_2_ADMIN_SERVICE} {
+            uri /auth
+            copy_headers x-api-host x-forwarded-uri x-forwarded-host x-forwarded-for x-api-key x-real-ip forwarded cookie
+        }
+
+        reverse_proxy {$HUB_1_SERVICE} {$HUB_2_SERVICE}
+    }
+
+    # Allow /sse
+    handle @sse {
         # works fine without it
        forward_auth {$HUB_1_ADMIN_SERVICE} {$HUB_2_ADMIN_SERVICE} {
             uri /auth

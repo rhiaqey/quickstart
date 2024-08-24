@@ -1,1 +1,1 @@
-# Open telemetry
+# Open Telemetry

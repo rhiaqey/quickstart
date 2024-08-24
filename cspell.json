@@ -1,0 +1,22 @@
+{
+    "version": "0.2",
+    "ignorePaths": [],
+    "dictionaryDefinitions": [],
+    "dictionaries": [],
+    "words": [
+        "Complexpass",
+        "logfmt",
+        "mymaster",
+        "openobserve",
+        "otlphttp",
+        "Quickstart",
+        "rhiaqey",
+        "somethingstrong",
+        "usermod",
+        "Vultr",
+        "zinclabs",
+        "zpages"
+    ],
+    "ignoreWords": [],
+    "import": []
+}
