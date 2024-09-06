@@ -7,5 +7,5 @@ docker run -p 5080:5080 \
     -e ZO_TELEMETRY=false \
     -e ZO_USAGE_REPORTING_ENABLED=false \
     --network host \
-        public.ecr.aws/zinclabs/openobserve:v0.10.8-rc5
+        openobserve/openobserve:v0.11.0
 ```
