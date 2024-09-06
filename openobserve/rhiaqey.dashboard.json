@@ -1,11 +1,11 @@
 {
   "version": 4,
-  "dashboardId": "7217525657054478339",
+  "dashboardId": "7237691578976829459",
   "title": "Rhiaqey",
   "description": "",
   "role": "",
   "owner": "",
-  "created": "2024-07-12T14:26:08.209Z",
+  "created": "2024-09-06T05:26:49.391Z",
   "tabs": [
     {
       "tabId": "default",
@@ -47,7 +47,8 @@
           "queryType": "promql",
           "queries": [
             {
-              "query": "ceil(count(rq_up))",
+              "query": "ceil(count(log_metric_gauge_up))",
+              "vrlFunctionQuery": null,
               "customQuery": true,
               "fields": {
                 "stream": "process_cpu_seconds_total",
@@ -97,7 +98,8 @@
           "queryType": "promql",
           "queries": [
             {
-              "query": "sum(rq_total_clients)",
+              "query": "sum(total_clients)",
+              "vrlFunctionQuery": null,
               "customQuery": true,
               "fields": {
                 "stream": "process_cpu_seconds_total",
@@ -147,7 +149,8 @@
           "queryType": "promql",
           "queries": [
             {
-              "query": "sum(rq_total_channels{kind=\"hub\"}) / count(rq_total_channels{kind=\"hub\"})",
+              "query": "sum(total_channels{kind=\"hub\"}) / count(total_channels{kind=\"hub\"})",
+              "vrlFunctionQuery": null,
               "customQuery": true,
               "fields": {
                 "stream": "process_cpu_seconds_total",
@@ -197,7 +200,8 @@
           "queryType": "promql",
           "queries": [
             {
-              "query": "sum(rq_total_connections)",
+              "query": "sum(total_connections)",
+              "vrlFunctionQuery": null,
               "customQuery": true,
               "fields": {
                 "stream": "process_cpu_seconds_total",
@@ -247,7 +251,8 @@
           "queryType": "promql",
           "queries": [
             {
-              "query": "sum(rq_total_clients{})",
+              "query": "sum(total_clients{})",
+              "vrlFunctionQuery": null,
               "customQuery": true,
               "fields": {
                 "stream": "process_cpu_seconds_total",
