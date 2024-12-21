@@ -2,7 +2,7 @@ services:
 
   redis-master:
     container_name: redis-master
-    image: "rhiaqey/redis:7.4.0"
+    image: "rhiaqey/redis:7.4.1"
     environment:
       - REDIS_PORT_NUMBER=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
@@ -18,7 +18,7 @@ services:
 
   redis-slave-1:
     container_name: redis-slave-1
-    image: "rhiaqey/redis:7.4.0"
+    image: "rhiaqey/redis:7.4.1"
     environment:
       - REDIS_PORT_NUMBER=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
@@ -41,7 +41,7 @@ services:
 
   #   redis-slave-2:
   #    container_name: redis-slave-2
-  #    image: "rhiaqey/redis:7.4.0"
+  #    image: "rhiaqey/redis:7.4.1"
   #    environment:
   #      - REDIS_PORT_NUMBER=${REDIS_PORT}
   #      - REDIS_PASSWORD=${REDIS_PASSWORD}
@@ -64,7 +64,7 @@ services:
 
   redis-sentinel-1:
     container_name: redis-sentinel-1
-    image: "rhiaqey/redis-sentinel:7.4.0"
+    image: "rhiaqey/redis-sentinel:7.4.1"
     environment:
       - REDIS_MASTER_HOST=redis-master
       - REDIS_MASTER_PASSWORD=${REDIS_PASSWORD}
@@ -88,7 +88,7 @@ services:
 
   redis-sentinel-2:
     container_name: redis-sentinel-2
-    image: "rhiaqey/redis-sentinel:7.4.0"
+    image: "rhiaqey/redis-sentinel:7.4.1"
     environment:
       - REDIS_MASTER_HOST=redis-master
       - REDIS_MASTER_PASSWORD=${REDIS_PASSWORD}
@@ -112,7 +112,7 @@ services:
 
   redis-sentinel-3:
     container_name: redis-sentinel-3
-    image: "rhiaqey/redis-sentinel:7.4.0"
+    image: "rhiaqey/redis-sentinel:7.4.1"
     environment:
       - REDIS_MASTER_HOST=redis-master
       - REDIS_MASTER_PASSWORD=${REDIS_PASSWORD}
@@ -136,7 +136,7 @@ services:
 
   ops:
     container_name: rhiaqey-ops
-    image: "rhiaqey/hub:0.1.276"
+    image: "rhiaqey/hub:0.1.335"
     command: generate-keys --skip --write /data/hub
     entrypoint: rhiaqey-hub
     volumes:
@@ -145,7 +145,7 @@ services:
 
   hub1:
     container_name: rhiaqey-hub-1
-    image: "rhiaqey/hub:0.1.276"
+    image: "rhiaqey/hub:0.1.335"
     environment:
       - ID=${HUB_1_ID}
       - ORGANIZATION=${ORGANIZATION}
@@ -183,7 +183,7 @@ services:
 
   hub2:
     container_name: rhiaqey-hub-2
-    image: "rhiaqey/hub:0.1.276"
+    image: "rhiaqey/hub:0.1.335"
     environment:
       - ID=${HUB_2_ID}
       - ORGANIZATION=${ORGANIZATION}
@@ -222,7 +222,7 @@ services:
 
   gateway-ws-1:
     container_name: rhiaqey-gateway-ws-1
-    image: "rhiaqey/websocket:0.1.132"
+    image: "rhiaqey/websocket:0.1.172"
     environment:
       - ID=${GATEWAY_1_ID}
       - ORGANIZATION=${ORGANIZATION}
@@ -254,7 +254,7 @@ services:
 
   gateway-ws-2:
     container_name: rhiaqey-gateway-ws-2
-    image: "rhiaqey/websocket:0.1.132"
+    image: "rhiaqey/websocket:0.1.172"
     environment:
       - ID=${GATEWAY_2_ID}
       - ORGANIZATION=${ORGANIZATION}
@@ -286,7 +286,7 @@ services:
 
   producer-ticker-1:
     container_name: rhiaqey-producer-ticker-1
-    image: "rhiaqey/ticker:0.1.132"
+    image: "rhiaqey/ticker:0.1.180"
     environment:
       - ID=${PRODUCER_1_ID}
       - ORGANIZATION=${ORGANIZATION}
@@ -317,7 +317,7 @@ services:
 
 #  producer-iss-position-1:
 #    container_name: rhiaqey-producer-iss-position-1
-#    image: "rhiaqey/iss-position:0.1.132"
+#    image: "rhiaqey/iss-position:0.1.180"
 #    environment:
 #      - ID=${PRODUCER_2_ID}
 #      - NAME=${PRODUCER_2_NAME}
@@ -382,7 +382,7 @@ services:
 
   metrics-collector:
     container_name: fluent-bit
-    image: "rhiaqey/fluent-bit:3.1.7"
+    image: "rhiaqey/fluent-bit:3.2.2"
     volumes:
       - $PWD/fluent-bit/functions.lua:/opt/bitnami/fluent-bit/conf/functions.lua
       - $PWD/fluent-bit/fluent-bit.conf:/opt/bitnami/fluent-bit/conf/fluent-bit.conf
